@@ -1,0 +1,68 @@
+﻿@model IEnumerable<GymYanten.Models.Rutina>
+@using GymYanten.Models
+@{
+    ViewData["Title"] = "Rutinas";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Rutinas</div>
+        <div class="page-subtitle">Programas de entrenamiento</div>
+    </div>
+    @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.Entrenador))
+    {
+        <a class="btn-gym" asp-action="Crear"><i class="bi bi-plus-lg"></i> Nueva Rutina</a>
+    }
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;">
+    @foreach (var rutina in Model)
+    {
+        <div class="card-gym" style="display:flex;flex-direction:column;">
+            <div class="card-gym-header">
+                <span class="card-gym-title">@rutina.Nombre</span>
+                @{
+                    var nivelClass = rutina.Nivel switch
+                    {
+                        NivelRutina.Principiante => "badge-green",
+                        NivelRutina.Intermedio => "badge-yellow",
+                        NivelRutina.Avanzado => "badge-red",
+                        _ => "badge-gray"
+                    };
+                }
+                <span class="badge-gym @nivelClass">@rutina.Nivel</span>
+            </div>
+            <div class="card-gym-body" style="flex:1;">
+                <p style="color:var(--muted);font-size:.88rem;margin-bottom:1rem;min-height:40px;">
+                    @(rutina.Descripcion ?? "Sin descripción")
+                </p>
+                <div style="display:flex;gap:1.5rem;font-size:.82rem;color:var(--muted);margin-bottom:1rem;">
+                    <span><i class="bi bi-clock"></i> @rutina.DuracionEstimadaMinutos min</span>
+                    <span><i class="bi bi-person"></i> @rutina.Entrenador?.NombreCompleto</span>
+                    <span><i class="bi bi-calendar3"></i> @rutina.FechaCreacion.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                    <a class="btn-gym-outline" asp-action="Detalles" asp-route-id="@rutina.Id">
+                        <i class="bi bi-eye"></i> Ver
+                    </a>
+                    @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.Entrenador))
+                    {
+                        <a class="btn-gym-outline" asp-action="Editar" asp-route-id="@rutina.Id">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <a class="btn-danger-gym" asp-action="Eliminar" asp-route-id="@rutina.Id">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    @if (!Model.Any())
+    {
+        <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:4rem;">
+            <i class="bi bi-calendar-x" style="font-size:2.5rem;display:block;margin-bottom:.75rem;"></i>
+            No hay rutinas disponibles aún
+        </div>
+    }
+</div>

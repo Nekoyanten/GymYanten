@@ -1,0 +1,60 @@
+﻿@model GymYanten.Models.Ejercicio
+@{
+    ViewData["Title"] = "Editar Ejercicio";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Editar Ejercicio</div>
+        <div class="page-subtitle">@Model.Nombre</div>
+    </div>
+    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+
+<div style="max-width:600px;">
+    <div class="card-gym">
+        <div class="card-gym-body">
+            <form asp-action="Editar" method="post" class="form-gym">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="FechaCreacion" />
+
+                <div style="margin-bottom:1.2rem;">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" />
+                    <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                </div>
+
+                <div style="margin-bottom:1.2rem;">
+                    <label asp-for="GrupoMuscular"></label>
+                    <select asp-for="GrupoMuscular" asp-items="Html.GetEnumSelectList<GymYanten.Models.GrupoMuscular>()"></select>
+                    <span asp-validation-for="GrupoMuscular" class="field-validation-error"></span>
+                </div>
+
+                <div style="margin-bottom:1.2rem;">
+                    <label asp-for="Descripcion"></label>
+                    <textarea asp-for="Descripcion" rows="4"></textarea>
+                </div>
+
+                <div style="margin-bottom:1.2rem;display:flex;align-items:center;gap:.75rem;">
+                    <input asp-for="RequiereEquipo" type="checkbox" style="width:16px;height:16px;accent-color:var(--accent);" />
+                    <label asp-for="RequiereEquipo" style="text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--text);margin:0;">
+                        Requiere equipo o máquinas
+                    </label>
+                </div>
+
+                <div style="margin-bottom:1.2rem;display:flex;align-items:center;gap:.75rem;">
+                    <input asp-for="Activo" type="checkbox" style="width:16px;height:16px;accent-color:var(--accent);" />
+                    <label asp-for="Activo" style="text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--text);margin:0;">
+                        Activo (visible en el catálogo)
+                    </label>
+                </div>
+
+                <div style="display:flex;gap:.75rem;">
+                    <button type="submit" class="btn-gym"><i class="bi bi-floppy"></i> Guardar Cambios</button>
+                    <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

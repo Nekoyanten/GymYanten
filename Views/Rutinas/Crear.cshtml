@@ -1,0 +1,53 @@
+﻿@model GymYanten.Models.Rutina
+@{
+    ViewData["Title"] = "Nueva Rutina";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Nueva Rutina</div>
+        <div class="page-subtitle">Diseña un nuevo programa de entrenamiento</div>
+    </div>
+    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+
+<div style="max-width:600px;">
+    <div class="card-gym">
+        <div class="card-gym-body">
+            <form asp-action="Crear" method="post" class="form-gym">
+                @Html.AntiForgeryToken()
+
+                <div style="margin-bottom:1.2rem;">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" placeholder="Ej: Fuerza Upper Body 3x semana" />
+                    <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+                    <div>
+                        <label asp-for="Nivel"></label>
+                        <select asp-for="Nivel" asp-items="Html.GetEnumSelectList<GymYanten.Models.NivelRutina>()">
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                        <span asp-validation-for="Nivel" class="field-validation-error"></span>
+                    </div>
+                    <div>
+                        <label asp-for="DuracionEstimadaMinutos"></label>
+                        <input asp-for="DuracionEstimadaMinutos" type="number" min="1" max="300" placeholder="60" />
+                        <span asp-validation-for="DuracionEstimadaMinutos" class="field-validation-error"></span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:1.8rem;">
+                    <label asp-for="Descripcion"></label>
+                    <textarea asp-for="Descripcion" rows="4" placeholder="Describe el objetivo y estructura de la rutina..."></textarea>
+                </div>
+
+                <div style="display:flex;gap:.75rem;">
+                    <button type="submit" class="btn-gym"><i class="bi bi-floppy"></i> Crear Rutina</button>
+                    <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

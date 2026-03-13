@@ -1,0 +1,106 @@
+﻿@model IEnumerable<GymYanten.Models.Ejercicio>
+@using GymYanten.Models
+@{
+    ViewData["Title"] = "Ejercicios";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Ejercicios</div>
+        <div class="page-subtitle">Catálogo de ejercicios disponibles</div>
+    </div>
+    @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.Entrenador))
+    {
+        <a class="btn-gym" asp-action="Crear"><i class="bi bi-plus-lg"></i> Nuevo Ejercicio</a>
+    }
+</div>
+
+<!-- Filtros -->
+<div class="card-gym" style="margin-bottom:1.5rem;">
+    <div class="card-gym-body">
+        <form method="get" asp-action="Index" class="form-gym" style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;">
+                <label>Buscar</label>
+                <input type="text" name="buscar" value="@ViewBag.Buscar" placeholder="Nombre del ejercicio..." />
+            </div>
+            <div style="flex:1;min-width:180px;">
+                <label>Grupo Muscular</label>
+                <select name="grupo">
+                    <option value="">Todos</option>
+                    @foreach (GrupoMuscular g in ViewBag.Grupos)
+                    {
+                        <option value="@g" selected="@(ViewBag.Grupo?.ToString() == g.ToString())">@g</option>
+                    }
+                </select>
+            </div>
+            <div style="display:flex;gap:.5rem;">
+                <button type="submit" class="btn-gym"><i class="bi bi-search"></i> Filtrar</button>
+                <a asp-action="Index" class="btn-gym-outline">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabla -->
+<div class="card-gym">
+    <table class="table-gym">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Grupo Muscular</th>
+                <th>Requiere Equipo</th>
+                <th>Descripción</th>
+                <th style="text-align:right;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="font-weight:600;">@item.Nombre</td>
+                    <td>
+                        <span class="badge-gym badge-yellow">@item.GrupoMuscular</span>
+                    </td>
+                    <td>
+                        @if (item.RequiereEquipo)
+                        {
+                            <span class="badge-gym badge-red"><i class="bi bi-tools"></i> Sí</span>
+                        }
+                        else
+                        {
+                            <span class="badge-gym badge-gray">No</span>
+                        }
+                    </td>
+                    <td style="color:var(--muted);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                        @item.Descripcion
+                    </td>
+                    <td style="text-align:right;">
+                        <div style="display:flex;gap:.5rem;justify-content:flex-end;">
+                            <a class="btn-gym-outline" asp-action="Detalles" asp-route-id="@item.Id">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.Entrenador))
+                            {
+                                <a class="btn-gym-outline" asp-action="Editar" asp-route-id="@item.Id">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a class="btn-danger-gym" asp-action="Eliminar" asp-route-id="@item.Id">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" style="text-align:center;color:var(--muted);padding:3rem;">
+                        <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>
+                        No se encontraron ejercicios
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

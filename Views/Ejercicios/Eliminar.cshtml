@@ -1,0 +1,42 @@
+﻿@model GymYanten.Models.Ejercicio
+@{
+    ViewData["Title"] = "Eliminar Ejercicio";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-title">Eliminar Ejercicio</div>
+        <div class="page-subtitle">Confirma que deseas eliminar este ejercicio</div>
+    </div>
+    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+
+<div style="max-width:500px;">
+    <div class="card-gym">
+        <div class="card-gym-header">
+            <span class="card-gym-title" style="color:var(--accent2);">
+                <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
+            </span>
+        </div>
+        <div class="card-gym-body">
+            <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem;">
+                ¿Estás seguro que deseas eliminar el siguiente ejercicio? Esta acción lo desactivará del sistema.
+            </p>
+
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;">
+                <div style="font-weight:600;font-size:1.05rem;margin-bottom:.5rem;">@Model.Nombre</div>
+                <div style="color:var(--muted);font-size:.85rem;">@Model.Descripcion</div>
+                <div style="margin-top:.75rem;">
+                    <span class="badge-gym badge-yellow">@Model.GrupoMuscular</span>
+                </div>
+            </div>
+
+            <form asp-action="Eliminar" method="post" style="display:flex;gap:.75rem;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn-danger-gym"><i class="bi bi-trash"></i> Sí, eliminar</button>
+                <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+﻿@model GymYanten.Models.ViewModels.RegistroViewModel
+@{
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+<style>
+    .auth-wrap {
+        min-height: calc(100vh - 108px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+
+    .auth-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        width: 100%;
+        max-width: 480px;
+        overflow: hidden;
+    }
+
+    .auth-header {
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 2rem;
+    }
+
+    .auth-title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+    }
+
+    .auth-sub {
+        font-size: .82rem;
+        color: var(--muted);
+        margin-top: .2rem;
+    }
+
+    .auth-body {
+        padding: 2rem;
+    }
+
+    .field {
+        margin-bottom: 1.1rem;
+    }
+
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .btn-full {
+        width: 100%;
+        justify-content: center;
+        padding: .7rem;
+        font-size: .9rem;
+        margin-top: .5rem;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.25rem;
+        font-size: .82rem;
+        color: var(--muted);
+    }
+
+        .auth-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+    .val-errors {
+        background: #1a0800;
+        border: 1px solid var(--accent2);
+        color: var(--accent2);
+        padding: .75rem 1rem;
+        border-radius: var(--radius);
+        margin-bottom: 1rem;
+        font-size: .85rem;
+    }
+
+        .val-errors ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+</style>
+
+<div class="auth-wrap">
+    <div class="auth-box">
+        <div class="auth-header">
+            <div class="auth-title">Crear Cuenta</div>
+            <div class="auth-sub">Completa tus datos para registrarte como cliente</div>
+        </div>
+        <div class="auth-body">
+            <div asp-validation-summary="All" class="val-errors"></div>
+            <form asp-action="Registro" method="post" class="form-gym">
+                @Html.AntiForgeryToken()
+                <div class="grid-2">
+                    <div class="field">
+                        <label asp-for="Nombre"></label>
+                        <input asp-for="Nombre" placeholder="Juan" />
+                        <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Apellido"></label>
+                        <input asp-for="Apellido" placeholder="Pérez" />
+                        <span asp-validation-for="Apellido" class="field-validation-error"></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" type="email" placeholder="correo@ejemplo.com" />
+                    <span asp-validation-for="Email" class="field-validation-error"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="Telefono"></label>
+                    <input asp-for="Telefono" placeholder="+57 300 000 0000" />
+                </div>
+                <div class="field">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" type="password" placeholder="Mínimo 8 caracteres" />
+                    <span asp-validation-for="Password" class="field-validation-error"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="ConfirmarPassword"></label>
+                    <input asp-for="ConfirmarPassword" type="password" placeholder="Repite la contraseña" />
+                    <span asp-validation-for="ConfirmarPassword" class="field-validation-error"></span>
+                </div>
+                <button type="submit" class="btn-gym btn-full"><i class="bi bi-person-check"></i> Crear mi cuenta</button>
+            </form>
+            <div class="auth-footer">
+                ¿Ya tienes cuenta? <a asp-action="Login">Inicia sesión</a>
+            </div>
+        </div>
+    </div>
+</div>
