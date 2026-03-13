@@ -1,54 +1,48 @@
-﻿@model GymYanten.Models.Ejercicio
-@{
-    ViewData["Title"] = Model.Id == 0 ? "Nuevo Ejercicio" : "Editar Ejercicio";
-}
+@model GymYanten.Models.Ejercicio
+@{ ViewData["Title"] = "Nuevo Ejercicio"; }
 
-<div class="page-header">
+<div class="page-head">
     <div>
-        <div class="page-title">@ViewData["Title"]</div>
-        <div class="page-subtitle">Completa los datos del ejercicio</div>
+        <div class="acento"></div>
+        <div class="page-titulo">Nuevo Ejercicio</div>
+        <div class="page-sub">Agrega un ejercicio al catálogo</div>
     </div>
-    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
 </div>
 
-<div style="max-width:600px;">
-    <div class="card-gym">
-        <div class="card-gym-body">
-            <form asp-action="@(Model.Id == 0 ? "Crear" : "Editar")" method="post" class="form-gym">
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Datos del Ejercicio</span></div>
+        <div class="card-body">
+            <form asp-action="Crear" method="post">
                 @Html.AntiForgeryToken()
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="Nombre"></label>
-                    <input asp-for="Nombre" placeholder="Ej: Press de banca" />
-                    <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                <div class="form-grupo">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-ctrl" placeholder="Ej: Press de banca con barra" />
+                    <span asp-validation-for="Nombre" class="form-error"></span>
                 </div>
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="GrupoMuscular"></label>
-                    <select asp-for="GrupoMuscular" asp-items="Html.GetEnumSelectList<GymYanten.Models.GrupoMuscular>()">
-                        <option value="">-- Seleccionar --</option>
-                    </select>
-                    <span asp-validation-for="GrupoMuscular" class="field-validation-error"></span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="GrupoMuscular" class="form-label"></label>
+                        <select asp-for="GrupoMuscular" class="form-ctrl" asp-items="Html.GetEnumSelectList<GymYanten.Models.GrupoMuscular>()">
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                        <span asp-validation-for="GrupoMuscular" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo" style="display:flex;flex-direction:column;justify-content:flex-end;">
+                        <div class="form-check-row" style="margin-bottom:0;padding-bottom:.65rem;">
+                            <input asp-for="RequiereEquipo" type="checkbox" />
+                            <label asp-for="RequiereEquipo" class="form-check-label">Requiere equipo</label>
+                        </div>
+                    </div>
                 </div>
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="Descripcion"></label>
-                    <textarea asp-for="Descripcion" rows="4" placeholder="Describe cómo se realiza el ejercicio..."></textarea>
-                    <span asp-validation-for="Descripcion" class="field-validation-error"></span>
+                <div class="form-grupo">
+                    <label asp-for="Descripcion" class="form-label"></label>
+                    <textarea asp-for="Descripcion" class="form-ctrl" placeholder="Describe la ejecución del ejercicio..."></textarea>
                 </div>
-
-                <div style="margin-bottom:1.8rem;display:flex;align-items:center;gap:.75rem;">
-                    <input asp-for="RequiereEquipo" type="checkbox" style="width:16px;height:16px;accent-color:var(--accent);" />
-                    <label asp-for="RequiereEquipo" style="text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--text);margin:0;">
-                        Este ejercicio requiere equipo o máquinas
-                    </label>
-                </div>
-
-                <div style="display:flex;gap:.75rem;">
-                    <button type="submit" class="btn-gym">
-                        <i class="bi bi-floppy"></i> @(Model.Id == 0 ? "Crear Ejercicio" : "Guardar Cambios")
-                    </button>
-                    <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                <div style="display:flex;gap:.75rem;padding-top:.5rem;">
+                    <button type="submit" class="btn-amarillo"><i class="bi bi-floppy-fill"></i> Crear Ejercicio</button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
                 </div>
             </form>
         </div>

@@ -1,69 +1,63 @@
-﻿@model GymYanten.Models.ProgresoEntrenamiento
-@{
-    ViewData["Title"] = "Registrar Sesión";
-}
+@model GymYanten.Models.ProgresoEntrenamiento
+@{ ViewData["Title"] = "Registrar Sesión"; }
 
-<div class="page-header">
+<div class="page-head">
     <div>
-        <div class="page-title">Registrar Sesión</div>
-        <div class="page-subtitle">Anota tu entrenamiento de hoy</div>
+        <div class="acento"></div>
+        <div class="page-titulo">Registrar Sesión</div>
+        <div class="page-sub">Anota tu entrenamiento de hoy 💪</div>
     </div>
-    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
 </div>
 
-<div style="max-width:600px;">
-    <div class="card-gym">
-        <div class="card-gym-body">
-            <form asp-action="Registrar" method="post" class="form-gym">
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Datos de la Sesión</span></div>
+        <div class="card-body">
+            <form asp-action="Registrar" method="post">
                 @Html.AntiForgeryToken()
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="RutinaId">Rutina</label>
-                    <select asp-for="RutinaId" asp-items="ViewBag.Rutinas">
+                <div class="form-grupo">
+                    <label asp-for="RutinaId" class="form-label">Rutina</label>
+                    <select asp-for="RutinaId" class="form-ctrl" asp-items="ViewBag.Rutinas">
                         <option value="">-- Seleccionar rutina --</option>
                     </select>
-                    <span asp-validation-for="RutinaId" class="field-validation-error"></span>
+                    <span asp-validation-for="RutinaId" class="form-error"></span>
                 </div>
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="EjercicioId">Ejercicio</label>
-                    <select asp-for="EjercicioId" asp-items="ViewBag.Ejercicios">
+                <div class="form-grupo">
+                    <label asp-for="EjercicioId" class="form-label">Ejercicio</label>
+                    <select asp-for="EjercicioId" class="form-ctrl" asp-items="ViewBag.Ejercicios">
                         <option value="">-- Seleccionar ejercicio --</option>
                     </select>
-                    <span asp-validation-for="EjercicioId" class="field-validation-error"></span>
+                    <span asp-validation-for="EjercicioId" class="form-error"></span>
                 </div>
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="Fecha"></label>
-                    <input asp-for="Fecha" type="date" />
-                    <span asp-validation-for="Fecha" class="field-validation-error"></span>
+                <div class="form-grupo">
+                    <label asp-for="Fecha" class="form-label"></label>
+                    <input asp-for="Fecha" class="form-ctrl" type="date" />
+                    <span asp-validation-for="Fecha" class="form-error"></span>
                 </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
-                    <div>
-                        <label asp-for="SeriesRealizadas">Series</label>
-                        <input asp-for="SeriesRealizadas" type="number" min="1" placeholder="4" />
-                        <span asp-validation-for="SeriesRealizadas" class="field-validation-error"></span>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="SeriesRealizadas" class="form-label">Series</label>
+                        <input asp-for="SeriesRealizadas" class="form-ctrl" type="number" min="1" placeholder="4" />
+                        <span asp-validation-for="SeriesRealizadas" class="form-error"></span>
                     </div>
-                    <div>
-                        <label asp-for="Repeticiones">Reps</label>
-                        <input asp-for="Repeticiones" type="number" min="1" placeholder="12" />
-                        <span asp-validation-for="Repeticiones" class="field-validation-error"></span>
+                    <div class="form-grupo">
+                        <label asp-for="Repeticiones" class="form-label">Reps</label>
+                        <input asp-for="Repeticiones" class="form-ctrl" type="number" min="1" placeholder="12" />
+                        <span asp-validation-for="Repeticiones" class="form-error"></span>
                     </div>
-                    <div>
-                        <label asp-for="PesoUsadoKg">Peso (kg)</label>
-                        <input asp-for="PesoUsadoKg" type="number" step="0.5" min="0" placeholder="60" />
+                    <div class="form-grupo">
+                        <label asp-for="PesoUsadoKg" class="form-label">Peso (kg)</label>
+                        <input asp-for="PesoUsadoKg" class="form-ctrl" type="number" step="0.5" min="0" placeholder="60" />
                     </div>
                 </div>
-
-                <div style="margin-bottom:1.8rem;">
-                    <label asp-for="Notas"></label>
-                    <textarea asp-for="Notas" rows="3" placeholder="¿Cómo te sentiste? ¿Algo que mejorar?"></textarea>
+                <div class="form-grupo">
+                    <label asp-for="Notas" class="form-label"></label>
+                    <textarea asp-for="Notas" class="form-ctrl" rows="3" placeholder="¿Cómo te sentiste? ¿Alguna observación?"></textarea>
                 </div>
-
-                <div style="display:flex;gap:.75rem;">
-                    <button type="submit" class="btn-gym"><i class="bi bi-floppy"></i> Guardar Progreso</button>
-                    <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                <div style="display:flex;gap:.75rem;padding-top:.5rem;">
+                    <button type="submit" class="btn-amarillo"><i class="bi bi-floppy-fill"></i> Guardar Progreso</button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
                 </div>
             </form>
         </div>

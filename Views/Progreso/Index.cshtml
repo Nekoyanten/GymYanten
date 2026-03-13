@@ -1,63 +1,59 @@
-﻿@model IEnumerable<GymYanten.Models.ProgresoEntrenamiento>
-@{
-    ViewData["Title"] = "Mi Progreso";
-}
+@model IEnumerable<GymYanten.Models.ProgresoEntrenamiento>
+@{ ViewData["Title"] = "Mi Progreso"; }
 
-<div class="page-header">
+<div class="page-head">
     <div>
-        <div class="page-title">Mi Progreso</div>
-        <div class="page-subtitle">Historial de entrenamiento</div>
+        <div class="acento"></div>
+        <div class="page-titulo">Mi Progreso</div>
+        <div class="page-sub">Historial de sesiones de entrenamiento</div>
     </div>
-    <a class="btn-gym" asp-action="Registrar"><i class="bi bi-plus-lg"></i> Registrar Sesión</a>
+    <a class="btn-amarillo" asp-action="Registrar"><i class="bi bi-plus-lg"></i> Registrar Sesión</a>
 </div>
 
 <!-- Filtros -->
-<div class="card-gym" style="margin-bottom:1.5rem;">
-    <div class="card-gym-body">
-        <form method="get" asp-action="Index" class="form-gym" style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
+<div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-body">
+        <form method="get" asp-action="Index" style="display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;">
             <div style="flex:1;min-width:180px;">
-                <label>Rutina</label>
-                <select name="rutinaId">
+                <label class="form-label">Rutina</label>
+                <select name="rutinaId" class="form-ctrl">
                     <option value="">Todas las rutinas</option>
                     @foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem item in ViewBag.Rutinas)
                     {
-                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">@item.Text</option>
                     }
                 </select>
             </div>
             <div style="flex:1;min-width:180px;">
-                <label>Ejercicio</label>
-                <select name="ejercicioId">
+                <label class="form-label">Ejercicio</label>
+                <select name="ejercicioId" class="form-ctrl">
                     <option value="">Todos los ejercicios</option>
                     @foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem item in ViewBag.Ejercicios)
                     {
-                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">@item.Text</option>
                     }
                 </select>
             </div>
-            <div style="display:flex;gap:.5rem;">
-                <button type="submit" class="btn-gym"><i class="bi bi-search"></i> Filtrar</button>
-                <a asp-action="Index" class="btn-gym-outline">Limpiar</a>
+            <div style="display:flex;gap:.5rem;padding-bottom:1px;">
+                <button type="submit" class="btn-amarillo"><i class="bi bi-search"></i> Filtrar</button>
+                <a asp-action="Index" class="btn-outline">Limpiar</a>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Tabla de progreso -->
-<div class="card-gym">
-    <table class="table-gym">
+<!-- Tabla -->
+<div class="card">
+    <table class="tabla">
         <thead>
             <tr>
                 <th>Fecha</th>
-                <th>Rutina</th>
                 <th>Ejercicio</th>
-                @if (!User.IsInRole("Cliente"))
-                {
-                    <th>Cliente</th>
-                }
-                <th>Series</th>
-                <th>Reps</th>
-                <th>Peso (kg)</th>
+                <th>Rutina</th>
+                @if (!User.IsInRole("Cliente")) { <th>Cliente</th> }
+                <th style="text-align:center;">Series</th>
+                <th style="text-align:center;">Reps</th>
+                <th style="text-align:center;">Peso</th>
                 <th>Notas</th>
                 <th style="text-align:right;">Acciones</th>
             </tr>
@@ -66,46 +62,40 @@
             @foreach (var p in Model)
             {
                 <tr>
-                    <td style="font-weight:600;white-space:nowrap;">@p.Fecha.ToString("dd/MM/yyyy")</td>
-                    <td style="color:var(--muted);">@p.Rutina?.Nombre</td>
-                    <td>@p.Ejercicio?.Nombre</td>
-                    @if (!User.IsInRole("Cliente"))
-                    {
-                        <td>@p.Cliente?.NombreCompleto</td>
-                    }
-                    <td><span class="badge-gym badge-yellow">@p.SeriesRealizadas</span></td>
-                    <td>@p.Repeticiones</td>
-                    <td>
+                    <td style="font-weight:700;white-space:nowrap;color:var(--amarillo);">
+                        @p.Fecha.ToString("dd/MM/yyyy")
+                    </td>
+                    <td style="font-weight:600;">@p.Ejercicio?.Nombre</td>
+                    <td style="color:var(--blanco3);font-size:.85rem;">@p.Rutina?.Nombre</td>
+                    @if (!User.IsInRole("Cliente")) { <td>@p.Cliente?.NombreCompleto</td> }
+                    <td style="text-align:center;"><span class="badge badge-amarillo">@p.SeriesRealizadas</span></td>
+                    <td style="text-align:center;font-weight:600;">@p.Repeticiones</td>
+                    <td style="text-align:center;">
                         @if (p.PesoUsadoKg.HasValue)
                         {
-                            <span style="color:var(--accent);font-weight:600;">@p.PesoUsadoKg kg</span>
+                            <span style="color:var(--amarillo);font-weight:700;">@p.PesoUsadoKg kg</span>
                         }
-                        else
-                        {
-
-                            <span style="color:var(--muted);">—</span>
-                        }
+                        else { <span style="color:var(--blanco3);">—</span> }
                     </td>
-                    <td style="color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                    <td style="color:var(--blanco3);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.85rem;">
                         @p.Notas
                     </td>
                     <td style="text-align:right;">
-                        <div style="display:flex;gap:.5rem;justify-content:flex-end;">
-                            <a class="btn-gym-outline" asp-action="Detalles" asp-route-id="@p.Id"><i class="bi bi-eye"></i></a>
-                            <a class="btn-gym-outline" asp-action="Editar" asp-route-id="@p.Id"><i class="bi bi-pencil"></i></a>
-                            <a class="btn-danger-gym" asp-action="Eliminar" asp-route-id="@p.Id"><i class="bi bi-trash"></i></a>
+                        <div style="display:flex;gap:.4rem;justify-content:flex-end;">
+                            <a class="btn-outline" asp-action="Editar" asp-route-id="@p.Id" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a class="btn-peligro" asp-action="Eliminar" asp-route-id="@p.Id" title="Eliminar"><i class="bi bi-trash"></i></a>
                         </div>
                     </td>
                 </tr>
             }
             @if (!Model.Any())
             {
-                <tr>
-                    <td colspan="9" style="text-align:center;color:var(--muted);padding:3rem;">
-                        <i class="bi bi-graph-up" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>
-                        Sin registros de progreso aún. ¡Empieza hoy!
-                    </td>
-                </tr>
+                <tr><td colspan="9">
+                    <div class="empty">
+                        <i class="bi bi-graph-up"></i>
+                        <p>Sin registros de progreso. ¡Empieza hoy!</p>
+                    </div>
+                </td></tr>
             }
         </tbody>
     </table>

@@ -1,53 +1,74 @@
-﻿@model GymYanten.Models.ViewModels.LoginViewModel
-@{
-    ViewData["Title"] = "Ingresar";
-}
+@model GymYanten.Models.ViewModels.LoginViewModel
+@{ ViewData["Title"] = "Ingresar"; Layout = "_Layout"; }
 
 <style>
-    .auth-wrap { min-height: calc(100vh - 108px); display: flex; align-items: center; justify-content: center; }
-    .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: 100%; max-width: 420px; overflow: hidden; }
-    .auth-header { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 2rem; text-align: center; }
-    .auth-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 4px; color: var(--accent); }
-    .auth-logo span { color: var(--accent2); }
-    .auth-sub { font-size: .82rem; color: var(--muted); margin-top: .25rem; }
-    .auth-body { padding: 2rem; }
-    .field { margin-bottom: 1.25rem; }
-    .remember-row { display: flex; align-items: center; gap: .5rem; margin-bottom: 1.5rem; }
-    .remember-row input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--accent); }
-    .remember-row label { font-size: .83rem; color: var(--muted); text-transform: none; letter-spacing: 0; margin: 0; }
-    .btn-full { width: 100%; justify-content: center; padding: .7rem; font-size: .9rem; }
-    .auth-footer { text-align: center; margin-top: 1.25rem; font-size: .82rem; color: var(--muted); }
-    .auth-footer a { color: var(--accent); text-decoration: none; }
-    .val-errors { background: #1a0800; border: 1px solid var(--accent2); color: var(--accent2); padding: .75rem 1rem; border-radius: var(--radius); margin-bottom: 1rem; font-size: .85rem; }
-    .val-errors ul { list-style: none; padding: 0; margin: 0; }
+    .auth-page {
+        min-height: calc(100vh - 64px - 52px);
+        display: flex; align-items: center; justify-content: center;
+        padding: 2rem;
+        background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,230,0,.06) 0%, transparent 70%);
+    }
+    .auth-box { width: 100%; max-width: 420px; }
+    .auth-brand {
+        text-align: center; margin-bottom: 2.5rem;
+    }
+    .auth-brand-logo {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 3rem; letter-spacing: 6px; color: var(--blanco); line-height: 1;
+    }
+    .auth-brand-logo em { color: var(--amarillo); font-style: normal; }
+    .auth-brand-sub { font-size: .8rem; color: var(--blanco3); letter-spacing: 2px; text-transform: uppercase; margin-top: .4rem; }
+    .auth-card {
+        background: var(--negro2);
+        border: 1px solid var(--borde);
+        border-top: 3px solid var(--amarillo);
+        border-radius: var(--r);
+        padding: 2rem;
+    }
+    .auth-titulo {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 1.4rem; font-weight: 700; letter-spacing: 2px;
+        text-transform: uppercase; margin-bottom: 1.5rem; color: var(--blanco2);
+    }
+    .auth-footer { text-align: center; margin-top: 1.25rem; font-size: .83rem; color: var(--blanco3); }
+    .auth-footer a { color: var(--amarillo); text-decoration: none; font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .btn-full { width: 100%; justify-content: center; padding: .75rem; font-size: .88rem; }
 </style>
 
-<div class="auth-wrap">
+<div class="auth-page">
     <div class="auth-box">
-        <div class="auth-header">
-            <div class="auth-logo">GYM<span>SYS</span></div>
-            <div class="auth-sub">Sistema de Gestión de Gimnasio</div>
+        <div class="auth-brand">
+            <div class="auth-brand-logo">GYM<em>YANTEN</em></div>
+            <div class="auth-brand-sub">Sistema de Gestión</div>
         </div>
-        <div class="auth-body">
+        <div class="auth-card">
+            <div class="auth-titulo">Iniciar Sesión</div>
             <div asp-validation-summary="All" class="val-errors"></div>
-            <form asp-action="Login" method="post" class="form-gym">
+            <form asp-action="Login" method="post">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
-                <div class="field">
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" type="email" placeholder="correo@ejemplo.com" />
-                    <span asp-validation-for="Email" class="field-validation-error"></span>
+
+                <div class="form-grupo">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-ctrl" type="email" placeholder="correo@ejemplo.com" />
+                    <span asp-validation-for="Email" class="form-error"></span>
                 </div>
-                <div class="field">
-                    <label asp-for="Password"></label>
-                    <input asp-for="Password" type="password" placeholder="••••••••" />
-                    <span asp-validation-for="Password" class="field-validation-error"></span>
+
+                <div class="form-grupo">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-ctrl" type="password" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="form-error"></span>
                 </div>
-                <div class="remember-row">
+
+                <div class="form-check-row" style="margin-bottom:1.5rem;">
                     <input asp-for="RecordarMe" type="checkbox" />
-                    <label asp-for="RecordarMe">Recordarme</label>
+                    <label asp-for="RecordarMe" class="form-check-label">Recordar mi sesión</label>
                 </div>
-                <button type="submit" class="btn-gym btn-full"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+
+                <button type="submit" class="btn-amarillo btn-full">
+                    <i class="bi bi-box-arrow-in-right"></i> Ingresar al Sistema
+                </button>
             </form>
             <div class="auth-footer">
                 ¿No tienes cuenta? <a asp-action="Registro">Regístrate aquí</a>

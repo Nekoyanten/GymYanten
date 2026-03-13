@@ -1,137 +1,75 @@
-﻿@model GymYanten.Models.ViewModels.RegistroViewModel
-@{
-    ViewData["Title"] = "Crear Cuenta";
-}
+@model GymYanten.Models.ViewModels.RegistroViewModel
+@{ ViewData["Title"] = "Crear Cuenta"; Layout = "_Layout"; }
 
 <style>
-    .auth-wrap {
-        min-height: calc(100vh - 108px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem 0;
-    }
-
-    .auth-box {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        width: 100%;
-        max-width: 480px;
-        overflow: hidden;
-    }
-
-    .auth-header {
-        background: var(--surface2);
-        border-bottom: 1px solid var(--border);
-        padding: 1.5rem 2rem;
-    }
-
-    .auth-title {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 1.5rem;
-        letter-spacing: 3px;
-    }
-
-    .auth-sub {
-        font-size: .82rem;
-        color: var(--muted);
-        margin-top: .2rem;
-    }
-
-    .auth-body {
+    .auth-page {
+        min-height: calc(100vh - 64px - 52px);
+        display: flex; align-items: center; justify-content: center;
         padding: 2rem;
+        background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,230,0,.06) 0%, transparent 70%);
     }
-
-    .field {
-        margin-bottom: 1.1rem;
+    .auth-box { width: 100%; max-width: 500px; }
+    .auth-card {
+        background: var(--negro2); border: 1px solid var(--borde);
+        border-top: 3px solid var(--amarillo); border-radius: var(--r); padding: 2rem;
     }
-
-    .grid-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+    .auth-titulo {
+        font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700;
+        letter-spacing: 2px; text-transform: uppercase; margin-bottom: .25rem; color: var(--blanco2);
     }
-
-    .btn-full {
-        width: 100%;
-        justify-content: center;
-        padding: .7rem;
-        font-size: .9rem;
-        margin-top: .5rem;
-    }
-
-    .auth-footer {
-        text-align: center;
-        margin-top: 1.25rem;
-        font-size: .82rem;
-        color: var(--muted);
-    }
-
-        .auth-footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-    .val-errors {
-        background: #1a0800;
-        border: 1px solid var(--accent2);
-        color: var(--accent2);
-        padding: .75rem 1rem;
-        border-radius: var(--radius);
-        margin-bottom: 1rem;
-        font-size: .85rem;
-    }
-
-        .val-errors ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    .auth-sub { font-size: .82rem; color: var(--blanco3); margin-bottom: 1.75rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-full { width: 100%; justify-content: center; padding: .75rem; font-size: .88rem; margin-top: .25rem; }
+    .auth-footer { text-align: center; margin-top: 1.25rem; font-size: .83rem; color: var(--blanco3); }
+    .auth-footer a { color: var(--amarillo); text-decoration: none; font-weight: 600; }
 </style>
 
-<div class="auth-wrap">
+<div class="auth-page">
     <div class="auth-box">
-        <div class="auth-header">
-            <div class="auth-title">Crear Cuenta</div>
+        <div class="auth-card">
+            <div class="auth-titulo">Crear Cuenta</div>
             <div class="auth-sub">Completa tus datos para registrarte como cliente</div>
-        </div>
-        <div class="auth-body">
+
             <div asp-validation-summary="All" class="val-errors"></div>
-            <form asp-action="Registro" method="post" class="form-gym">
+
+            <form asp-action="Registro" method="post">
                 @Html.AntiForgeryToken()
                 <div class="grid-2">
-                    <div class="field">
-                        <label asp-for="Nombre"></label>
-                        <input asp-for="Nombre" placeholder="Juan" />
-                        <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                    <div class="form-grupo">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-ctrl" placeholder="Juan" />
+                        <span asp-validation-for="Nombre" class="form-error"></span>
                     </div>
-                    <div class="field">
-                        <label asp-for="Apellido"></label>
-                        <input asp-for="Apellido" placeholder="Pérez" />
-                        <span asp-validation-for="Apellido" class="field-validation-error"></span>
+                    <div class="form-grupo">
+                        <label asp-for="Apellido" class="form-label"></label>
+                        <input asp-for="Apellido" class="form-ctrl" placeholder="Pérez" />
+                        <span asp-validation-for="Apellido" class="form-error"></span>
                     </div>
                 </div>
-                <div class="field">
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" type="email" placeholder="correo@ejemplo.com" />
-                    <span asp-validation-for="Email" class="field-validation-error"></span>
+                <div class="form-grupo">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-ctrl" type="email" placeholder="correo@ejemplo.com" />
+                    <span asp-validation-for="Email" class="form-error"></span>
                 </div>
-                <div class="field">
-                    <label asp-for="Telefono"></label>
-                    <input asp-for="Telefono" placeholder="+57 300 000 0000" />
+                <div class="form-grupo">
+                    <label asp-for="Telefono" class="form-label"></label>
+                    <input asp-for="Telefono" class="form-ctrl" placeholder="+57 300 000 0000" />
                 </div>
-                <div class="field">
-                    <label asp-for="Password"></label>
-                    <input asp-for="Password" type="password" placeholder="Mínimo 8 caracteres" />
-                    <span asp-validation-for="Password" class="field-validation-error"></span>
+                <div class="grid-2">
+                    <div class="form-grupo">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-ctrl" type="password" placeholder="Mín. 8 caracteres" />
+                        <span asp-validation-for="Password" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo">
+                        <label asp-for="ConfirmarPassword" class="form-label"></label>
+                        <input asp-for="ConfirmarPassword" class="form-ctrl" type="password" placeholder="Repite contraseña" />
+                        <span asp-validation-for="ConfirmarPassword" class="form-error"></span>
+                    </div>
                 </div>
-                <div class="field">
-                    <label asp-for="ConfirmarPassword"></label>
-                    <input asp-for="ConfirmarPassword" type="password" placeholder="Repite la contraseña" />
-                    <span asp-validation-for="ConfirmarPassword" class="field-validation-error"></span>
-                </div>
-                <button type="submit" class="btn-gym btn-full"><i class="bi bi-person-check"></i> Crear mi cuenta</button>
+                <button type="submit" class="btn-amarillo btn-full">
+                    <i class="bi bi-person-check-fill"></i> Crear mi Cuenta
+                </button>
             </form>
             <div class="auth-footer">
                 ¿Ya tienes cuenta? <a asp-action="Login">Inicia sesión</a>

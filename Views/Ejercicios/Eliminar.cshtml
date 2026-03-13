@@ -1,41 +1,35 @@
-﻿@model GymYanten.Models.Ejercicio
-@{
-    ViewData["Title"] = "Eliminar Ejercicio";
-}
+@model GymYanten.Models.Ejercicio
+@{ ViewData["Title"] = "Eliminar Ejercicio"; }
 
-<div class="page-header">
+<div class="page-head">
     <div>
-        <div class="page-title">Eliminar Ejercicio</div>
-        <div class="page-subtitle">Confirma que deseas eliminar este ejercicio</div>
+        <div class="acento"></div>
+        <div class="page-titulo">Eliminar Ejercicio</div>
     </div>
-    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
 </div>
 
 <div style="max-width:500px;">
-    <div class="card-gym">
-        <div class="card-gym-header">
-            <span class="card-gym-title" style="color:var(--accent2);">
-                <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
+    <div class="card" style="border-top:3px solid var(--rojo);">
+        <div class="card-head">
+            <span class="card-titulo" style="color:var(--rojo);">
+                <i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación
             </span>
         </div>
-        <div class="card-gym-body">
-            <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem;">
-                ¿Estás seguro que deseas eliminar el siguiente ejercicio? Esta acción lo desactivará del sistema.
+        <div class="card-body">
+            <p style="color:var(--blanco3);margin-bottom:1.5rem;font-size:.9rem;">
+                Esta acción desactivará el ejercicio del sistema. El historial de progreso se conservará.
             </p>
-
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;">
-                <div style="font-weight:600;font-size:1.05rem;margin-bottom:.5rem;">@Model.Nombre</div>
-                <div style="color:var(--muted);font-size:.85rem;">@Model.Descripcion</div>
-                <div style="margin-top:.75rem;">
-                    <span class="badge-gym badge-yellow">@Model.GrupoMuscular</span>
-                </div>
+            <div style="background:var(--negro3);border:1px solid var(--borde);border-radius:var(--r);padding:1.25rem;margin-bottom:1.75rem;">
+                <div style="font-weight:700;font-size:1.05rem;margin-bottom:.5rem;">@Model.Nombre</div>
+                <div style="margin-bottom:.75rem;"><span class="badge badge-amarillo">@Model.GrupoMuscular</span></div>
+                <div style="color:var(--blanco3);font-size:.85rem;">@Model.Descripcion</div>
             </div>
-
             <form asp-action="Eliminar" method="post" style="display:flex;gap:.75rem;">
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn-danger-gym"><i class="bi bi-trash"></i> Sí, eliminar</button>
-                <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                <button type="submit" class="btn-peligro"><i class="bi bi-trash-fill"></i> Sí, eliminar</button>
+                <a asp-action="Index" class="btn-outline">Cancelar</a>
             </form>
         </div>
     </div>

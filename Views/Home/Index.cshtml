@@ -1,138 +1,81 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
-}
+@{ ViewData["Title"] = "Dashboard"; }
 
 <style>
     .hero {
-        text-align: center;
-        padding: 5rem 2rem 4rem;
-        background: radial-gradient(ellipse at 50% 0%, #1a1a00 0%, transparent 70%);
-        border-bottom: 1px solid var(--border);
-        margin: -2.5rem -2rem 3rem;
-    }
-
-    .hero-title {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: clamp(3rem, 8vw, 6rem);
-        letter-spacing: 8px;
-        line-height: 1;
-    }
-
-        .hero-title span {
-            color: var(--accent);
-        }
-
-    .hero-sub {
-        color: var(--muted);
-        font-size: 1rem;
-        margin: 1rem 0 2.5rem;
-        max-width: 480px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .stat-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
+        padding: 4rem 0 3.5rem;
+        border-bottom: 1px solid var(--borde);
         margin-bottom: 3rem;
+        position: relative;
     }
-
-    .stat-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-        transition: border-color .2s;
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -2.5rem; right: -2.5rem; bottom: 0;
+        background: radial-gradient(ellipse 70% 80% at 50% 0%, rgba(255,230,0,.05) 0%, transparent 70%);
+        pointer-events: none;
     }
-
-        .stat-card:hover {
-            border-color: var(--accent);
-        }
-
-    .stat-icon {
-        font-size: 2rem;
-        color: var(--accent);
+    .hero-eyebrow {
+        font-size: .72rem; font-weight: 700; letter-spacing: 3px;
+        text-transform: uppercase; color: var(--amarillo); margin-bottom: .75rem;
+        display: flex; align-items: center; gap: .5rem;
     }
-
-    .stat-label {
-        font-size: .75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--muted);
-    }
-
-    .stat-value {
+    .hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 2px; background: var(--amarillo); }
+    .hero-titulo {
         font-family: 'Bebas Neue', sans-serif;
-        font-size: 1.8rem;
-        letter-spacing: 2px;
-        line-height: 1.1;
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        letter-spacing: 6px; line-height: .95; color: var(--blanco); margin-bottom: 1.25rem;
     }
+    .hero-titulo em { color: var(--amarillo); font-style: normal; }
+    .hero-desc { font-size: 1rem; color: var(--blanco3); max-width: 500px; margin-bottom: 2rem; line-height: 1.7; }
+    .hero-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
 
-    .quick-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-    }
-
-    .quick-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        text-decoration: none;
-        color: var(--text);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: .5rem;
-        transition: border-color .2s, transform .15s;
-    }
-
-        .quick-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            color: var(--text);
-        }
-
-        .quick-card i {
-            font-size: 1.5rem;
-            color: var(--accent);
-        }
-
-    .quick-card-title {
-        font-weight: 600;
-        font-size: .95rem;
-    }
-
-    .quick-card-desc {
-        font-size: .8rem;
-        color: var(--muted);
-    }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: var(--r); overflow: hidden; margin-bottom: 3rem; }
+    .stat-item { background: var(--negro2); padding: 1.5rem 2rem; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 2px; color: var(--amarillo); line-height: 1; }
+    .stat-label { font-size: .75rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blanco3); margin-top: .35rem; }
 
     .section-label {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 1.1rem;
-        letter-spacing: 3px;
-        color: var(--muted);
-        margin-bottom: 1rem;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: .75rem; font-weight: 700; letter-spacing: 3px;
+        text-transform: uppercase; color: var(--blanco3); margin-bottom: 1rem;
+        display: flex; align-items: center; gap: .75rem;
     }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--borde); }
+
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .75rem; }
+    .quick-card {
+        background: var(--negro2); border: 1px solid var(--borde);
+        border-radius: var(--r); padding: 1.5rem;
+        text-decoration: none; color: var(--blanco);
+        display: flex; flex-direction: column; gap: .6rem;
+        transition: border-color .15s, background .15s, transform .15s;
+        position: relative; overflow: hidden;
+    }
+    .quick-card::after {
+        content: ''; position: absolute; top: 0; left: 0; right: 0;
+        height: 2px; background: var(--amarillo);
+        transform: scaleX(0); transform-origin: left;
+        transition: transform .2s;
+    }
+    .quick-card:hover { border-color: var(--borde2); background: var(--negro3); transform: translateY(-2px); color: var(--blanco); }
+    .quick-card:hover::after { transform: scaleX(1); }
+    .quick-icon { font-size: 1.4rem; color: var(--amarillo); }
+    .quick-nombre { font-weight: 700; font-size: .95rem; letter-spacing: .5px; }
+    .quick-desc { font-size: .8rem; color: var(--blanco3); }
+    .quick-arrow { font-size: .75rem; color: var(--blanco3); margin-top: auto; }
 </style>
 
-@if (!User.Identity?.IsAuthenticated ?? true)
+@if (!(User.Identity?.IsAuthenticated ?? false))
 {
-    <!-- Hero público -->
     <div class="hero">
-        <div class="hero-title">GYM<span>SYS</span></div>
-        <p class="hero-sub">Sistema profesional de gestión de gimnasio. Rutinas, ejercicios y progreso en un solo lugar.</p>
-        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-            <a class="btn-gym" asp-controller="Account" asp-action="Login" style="padding:.7rem 2rem;font-size:.95rem;">
+        <div class="hero-eyebrow">Sistema Profesional</div>
+        <div class="hero-titulo">GYM<br/><em>YANTEN</em></div>
+        <p class="hero-desc">Gestiona rutinas, ejercicios y el progreso de cada cliente desde un solo lugar.</p>
+        <div class="hero-actions">
+            <a class="btn-amarillo" asp-controller="Account" asp-action="Login" style="padding:.7rem 2rem;font-size:.9rem;">
                 <i class="bi bi-box-arrow-in-right"></i> Ingresar
             </a>
-            <a class="btn-gym-outline" asp-controller="Account" asp-action="Registro" style="padding:.7rem 2rem;font-size:.95rem;">
+            <a class="btn-outline" asp-controller="Account" asp-action="Registro" style="padding:.7rem 2rem;font-size:.9rem;">
                 <i class="bi bi-person-plus"></i> Registrarme
             </a>
         </div>
@@ -140,57 +83,53 @@
 }
 else
 {
-    <!-- Dashboard autenticado -->
-    <div style="margin-bottom:2rem;">
-        <div class="page-title">Bienvenido, @User.Identity.Name</div>
-        <div class="page-subtitle">Aquí tienes un resumen de tu actividad</div>
+    <div style="margin-bottom:2.5rem;">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amarillo);margin-bottom:.4rem;">
+            Bienvenido de vuelta
+        </div>
+        <div class="page-titulo">@User.Identity!.Name</div>
     </div>
 
-    <div class="stat-grid">
-        <div class="stat-card">
-            <i class="bi bi-lightning-charge stat-icon"></i>
-            <div>
-                <div class="stat-label">Ejercicios</div>
-                <div class="stat-value">Catálogo</div>
-            </div>
+    <div class="stats-row">
+        <div class="stat-item">
+            <div class="stat-num"><i class="bi bi-lightning-charge-fill" style="font-size:2rem;"></i></div>
+            <div class="stat-label">Ejercicios Disponibles</div>
         </div>
-        <div class="stat-card">
-            <i class="bi bi-calendar3 stat-icon"></i>
-            <div>
-                <div class="stat-label">Rutinas</div>
-                <div class="stat-value">Activas</div>
-            </div>
+        <div class="stat-item">
+            <div class="stat-num"><i class="bi bi-calendar3-week" style="font-size:2rem;"></i></div>
+            <div class="stat-label">Rutinas Activas</div>
         </div>
-        <div class="stat-card">
-            <i class="bi bi-graph-up-arrow stat-icon"></i>
-            <div>
-                <div class="stat-label">Progreso</div>
-                <div class="stat-value">Historial</div>
-            </div>
+        <div class="stat-item">
+            <div class="stat-num"><i class="bi bi-graph-up-arrow" style="font-size:2rem;"></i></div>
+            <div class="stat-label">Registro de Progreso</div>
         </div>
     </div>
 
     <div class="section-label">Acceso Rápido</div>
     <div class="quick-grid">
         <a class="quick-card" asp-controller="Ejercicios" asp-action="Index">
-            <i class="bi bi-lightning-charge"></i>
-            <div class="quick-card-title">Ver Ejercicios</div>
-            <div class="quick-card-desc">Explora el catálogo completo</div>
+            <i class="bi bi-lightning-charge-fill quick-icon"></i>
+            <div class="quick-nombre">Ver Ejercicios</div>
+            <div class="quick-desc">Explora el catálogo completo de ejercicios</div>
+            <div class="quick-arrow">Ir al catálogo →</div>
         </a>
         <a class="quick-card" asp-controller="Rutinas" asp-action="Index">
-            <i class="bi bi-calendar3"></i>
-            <div class="quick-card-title">Mis Rutinas</div>
-            <div class="quick-card-desc">Consulta tus programas asignados</div>
+            <i class="bi bi-calendar3-week quick-icon"></i>
+            <div class="quick-nombre">Mis Rutinas</div>
+            <div class="quick-desc">Consulta tus programas de entrenamiento</div>
+            <div class="quick-arrow">Ver rutinas →</div>
         </a>
         <a class="quick-card" asp-controller="Progreso" asp-action="Registrar">
-            <i class="bi bi-plus-circle"></i>
-            <div class="quick-card-title">Registrar Sesión</div>
-            <div class="quick-card-desc">Anota el entrenamiento de hoy</div>
+            <i class="bi bi-plus-circle-fill quick-icon"></i>
+            <div class="quick-nombre">Registrar Sesión</div>
+            <div class="quick-desc">Anota el entrenamiento de hoy</div>
+            <div class="quick-arrow">Registrar ahora →</div>
         </a>
         <a class="quick-card" asp-controller="Progreso" asp-action="Index">
-            <i class="bi bi-graph-up-arrow"></i>
-            <div class="quick-card-title">Ver Progreso</div>
-            <div class="quick-card-desc">Revisa tu historial completo</div>
+            <i class="bi bi-graph-up-arrow quick-icon"></i>
+            <div class="quick-nombre">Mi Progreso</div>
+            <div class="quick-desc">Revisa tu historial y evolución</div>
+            <div class="quick-arrow">Ver historial →</div>
         </a>
     </div>
 }

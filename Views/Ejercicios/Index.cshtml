@@ -28,7 +28,8 @@
                     <option value="">Todos los grupos</option>
                     @foreach (GrupoMuscular g in ViewBag.Grupos)
                     {
-                        <option value="@g" @(ViewBag.Grupo?.ToString() == g.ToString() ? "selected" : "")>@g</option>
+                        var _selected = (ViewBag.Grupo?.ToString() == g.ToString()) ? " selected" : "";
+                        @Html.Raw($"<option value=\"{g}\"{_selected}>{g}</option>")
                     }
                 </select>
             </div>

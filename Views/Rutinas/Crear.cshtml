@@ -1,51 +1,47 @@
-﻿@model GymYanten.Models.Rutina
-@{
-    ViewData["Title"] = "Nueva Rutina";
-}
+@model GymYanten.Models.Rutina
+@{ ViewData["Title"] = "Nueva Rutina"; }
 
-<div class="page-header">
+<div class="page-head">
     <div>
-        <div class="page-title">Nueva Rutina</div>
-        <div class="page-subtitle">Diseña un nuevo programa de entrenamiento</div>
+        <div class="acento"></div>
+        <div class="page-titulo">Nueva Rutina</div>
+        <div class="page-sub">Diseña un programa de entrenamiento</div>
     </div>
-    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
 </div>
 
-<div style="max-width:600px;">
-    <div class="card-gym">
-        <div class="card-gym-body">
-            <form asp-action="Crear" method="post" class="form-gym">
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Datos de la Rutina</span></div>
+        <div class="card-body">
+            <form asp-action="Crear" method="post">
                 @Html.AntiForgeryToken()
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="Nombre"></label>
-                    <input asp-for="Nombre" placeholder="Ej: Fuerza Upper Body 3x semana" />
-                    <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                <div class="form-grupo">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-ctrl" placeholder="Ej: Fuerza Upper Body 3x semana" />
+                    <span asp-validation-for="Nombre" class="form-error"></span>
                 </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
-                    <div>
-                        <label asp-for="Nivel"></label>
-                        <select asp-for="Nivel" asp-items="Html.GetEnumSelectList<GymYanten.Models.NivelRutina>()">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="Nivel" class="form-label"></label>
+                        <select asp-for="Nivel" class="form-ctrl" asp-items="Html.GetEnumSelectList<GymYanten.Models.NivelRutina>()">
                             <option value="">-- Seleccionar --</option>
                         </select>
-                        <span asp-validation-for="Nivel" class="field-validation-error"></span>
+                        <span asp-validation-for="Nivel" class="form-error"></span>
                     </div>
-                    <div>
-                        <label asp-for="DuracionEstimadaMinutos"></label>
-                        <input asp-for="DuracionEstimadaMinutos" type="number" min="1" max="300" placeholder="60" />
-                        <span asp-validation-for="DuracionEstimadaMinutos" class="field-validation-error"></span>
+                    <div class="form-grupo">
+                        <label asp-for="DuracionEstimadaMinutos" class="form-label"></label>
+                        <input asp-for="DuracionEstimadaMinutos" class="form-ctrl" type="number" min="1" max="300" placeholder="60" />
+                        <span asp-validation-for="DuracionEstimadaMinutos" class="form-error"></span>
                     </div>
                 </div>
-
-                <div style="margin-bottom:1.8rem;">
-                    <label asp-for="Descripcion"></label>
-                    <textarea asp-for="Descripcion" rows="4" placeholder="Describe el objetivo y estructura de la rutina..."></textarea>
+                <div class="form-grupo">
+                    <label asp-for="Descripcion" class="form-label"></label>
+                    <textarea asp-for="Descripcion" class="form-ctrl" placeholder="Describe el objetivo y estructura de la rutina..."></textarea>
                 </div>
-
-                <div style="display:flex;gap:.75rem;">
-                    <button type="submit" class="btn-gym"><i class="bi bi-floppy"></i> Crear Rutina</button>
-                    <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                <div style="display:flex;gap:.75rem;padding-top:.5rem;">
+                    <button type="submit" class="btn-amarillo"><i class="bi bi-floppy-fill"></i> Crear Rutina</button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
                 </div>
             </form>
         </div>

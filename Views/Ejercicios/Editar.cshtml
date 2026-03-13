@@ -1,58 +1,53 @@
-﻿@model GymYanten.Models.Ejercicio
-@{
-    ViewData["Title"] = "Editar Ejercicio";
-}
+@model GymYanten.Models.Ejercicio
+@{ ViewData["Title"] = "Editar Ejercicio"; }
 
-<div class="page-header">
+<div class="page-head">
     <div>
-        <div class="page-title">Editar Ejercicio</div>
-        <div class="page-subtitle">@Model.Nombre</div>
+        <div class="acento"></div>
+        <div class="page-titulo">Editar Ejercicio</div>
+        <div class="page-sub">@Model.Nombre</div>
     </div>
-    <a class="btn-gym-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
 </div>
 
-<div style="max-width:600px;">
-    <div class="card-gym">
-        <div class="card-gym-body">
-            <form asp-action="Editar" method="post" class="form-gym">
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Modificar Datos</span></div>
+        <div class="card-body">
+            <form asp-action="Editar" method="post">
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="FechaCreacion" />
 
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="Nombre"></label>
-                    <input asp-for="Nombre" />
-                    <span asp-validation-for="Nombre" class="field-validation-error"></span>
+                <div class="form-grupo">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-ctrl" />
+                    <span asp-validation-for="Nombre" class="form-error"></span>
                 </div>
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="GrupoMuscular"></label>
-                    <select asp-for="GrupoMuscular" asp-items="Html.GetEnumSelectList<GymYanten.Models.GrupoMuscular>()"></select>
-                    <span asp-validation-for="GrupoMuscular" class="field-validation-error"></span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="GrupoMuscular" class="form-label"></label>
+                        <select asp-for="GrupoMuscular" class="form-ctrl" asp-items="Html.GetEnumSelectList<GymYanten.Models.GrupoMuscular>()"></select>
+                        <span asp-validation-for="GrupoMuscular" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo" style="display:flex;flex-direction:column;justify-content:flex-end;">
+                        <div class="form-check-row" style="margin-bottom:0;padding-bottom:.65rem;">
+                            <input asp-for="RequiereEquipo" type="checkbox" />
+                            <label asp-for="RequiereEquipo" class="form-check-label">Requiere equipo</label>
+                        </div>
+                    </div>
                 </div>
-
-                <div style="margin-bottom:1.2rem;">
-                    <label asp-for="Descripcion"></label>
-                    <textarea asp-for="Descripcion" rows="4"></textarea>
+                <div class="form-grupo">
+                    <label asp-for="Descripcion" class="form-label"></label>
+                    <textarea asp-for="Descripcion" class="form-ctrl"></textarea>
                 </div>
-
-                <div style="margin-bottom:1.2rem;display:flex;align-items:center;gap:.75rem;">
-                    <input asp-for="RequiereEquipo" type="checkbox" style="width:16px;height:16px;accent-color:var(--accent);" />
-                    <label asp-for="RequiereEquipo" style="text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--text);margin:0;">
-                        Requiere equipo o máquinas
-                    </label>
+                <div class="form-check-row">
+                    <input asp-for="Activo" type="checkbox" />
+                    <label asp-for="Activo" class="form-check-label">Activo en el catálogo</label>
                 </div>
-
-                <div style="margin-bottom:1.2rem;display:flex;align-items:center;gap:.75rem;">
-                    <input asp-for="Activo" type="checkbox" style="width:16px;height:16px;accent-color:var(--accent);" />
-                    <label asp-for="Activo" style="text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--text);margin:0;">
-                        Activo (visible en el catálogo)
-                    </label>
-                </div>
-
-                <div style="display:flex;gap:.75rem;">
-                    <button type="submit" class="btn-gym"><i class="bi bi-floppy"></i> Guardar Cambios</button>
-                    <a asp-action="Index" class="btn-gym-outline">Cancelar</a>
+                <div style="display:flex;gap:.75rem;padding-top:.5rem;">
+                    <button type="submit" class="btn-amarillo"><i class="bi bi-floppy-fill"></i> Guardar Cambios</button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
                 </div>
             </form>
         </div>
