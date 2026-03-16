@@ -66,6 +66,10 @@ namespace GymYanten.Controllers
         public async Task<IActionResult> Registrar(
             [Bind("RutinaId,EjercicioId,Fecha,SeriesRealizadas,Repeticiones,PesoUsadoKg,Notas")] ProgresoEntrenamiento progreso)
         {
+
+            ModelState.Remove("ClienteId");
+            ModelState.Remove("Cliente");
+
             if (ModelState.IsValid)
             {
                 var usuario = await _userManager.GetUserAsync(User);

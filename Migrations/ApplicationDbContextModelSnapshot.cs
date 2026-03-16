@@ -151,7 +151,7 @@ namespace GymYanten.Migrations
                     b.HasIndex("Nombre")
                         .IsUnique();
 
-                    b.ToTable("Ejercicios");
+                    b.ToTable("Ejercicios", (string)null);
                 });
 
             modelBuilder.Entity("GymYanten.Models.ProgresoEntrenamiento", b =>
@@ -199,7 +199,7 @@ namespace GymYanten.Migrations
 
                     b.HasIndex("RutinaId");
 
-                    b.ToTable("Progresos");
+                    b.ToTable("Progresos", (string)null);
                 });
 
             modelBuilder.Entity("GymYanten.Models.Rutina", b =>
@@ -239,7 +239,7 @@ namespace GymYanten.Migrations
 
                     b.HasIndex("EntrenadorId");
 
-                    b.ToTable("Rutinas");
+                    b.ToTable("Rutinas", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

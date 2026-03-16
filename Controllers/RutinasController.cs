@@ -94,6 +94,9 @@ namespace GymYanten.Controllers
         public async Task<IActionResult> Crear(
             [Bind("Nombre,Descripcion,Nivel,DuracionEstimadaMinutos")] Rutina rutina)
         {
+            ModelState.Remove("EntrenadorId");
+            ModelState.Remove("Entrenador");
+
             if (ModelState.IsValid)
             {
                 var usuario = await _userManager.GetUserAsync(User);
