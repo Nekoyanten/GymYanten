@@ -1,0 +1,64 @@
+@model GymYanten.Models.Rutina
+@{ ViewData["Title"] = "Editar Rutina"; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">Editar Rutina</div>
+        <div class="page-sub">@Model.Nombre</div>
+    </div>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Modificar Datos</span></div>
+        <div class="card-body">
+            <form asp-action="Editar" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="EntrenadorId" />
+                <input type="hidden" asp-for="FechaCreacion" />
+
+                <div class="form-grupo">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-ctrl" />
+                    <span asp-validation-for="Nombre" class="form-error"></span>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="Nivel" class="form-label"></label>
+                        <select asp-for="Nivel" class="form-ctrl"
+                                asp-items="Html.GetEnumSelectList<GymYanten.Models.NivelRutina>()">
+                        </select>
+                        <span asp-validation-for="Nivel" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo">
+                        <label asp-for="DuracionEstimadaMinutos" class="form-label"></label>
+                        <input asp-for="DuracionEstimadaMinutos" class="form-ctrl"
+                               type="number" min="1" max="300" />
+                        <span asp-validation-for="DuracionEstimadaMinutos" class="form-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-grupo">
+                    <label asp-for="Descripcion" class="form-label"></label>
+                    <textarea asp-for="Descripcion" class="form-ctrl"></textarea>
+                </div>
+
+                <div class="form-check-row">
+                    <input asp-for="Activa" type="checkbox" />
+                    <label asp-for="Activa" class="form-check-label">Rutina activa</label>
+                </div>
+
+                <div style="display:flex;gap:.75rem;padding-top:.5rem;">
+                    <button type="submit" class="btn-amarillo">
+                        <i class="bi bi-floppy-fill"></i> Guardar Cambios
+                    </button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

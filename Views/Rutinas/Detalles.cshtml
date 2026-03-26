@@ -1,0 +1,92 @@
+@model GymYanten.Models.Rutina
+@using GymYanten.Models
+@{ ViewData["Title"] = "Detalle Rutina"; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">@Model.Nombre</div>
+        <div class="page-sub">Detalle de la rutina</div>
+    </div>
+    <div style="display:flex;gap:.75rem;">
+        @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.Entrenador))
+        {
+            <a class="btn-amarillo" asp-action="Editar" asp-route-id="@Model.Id">
+                <i class="bi bi-pencil"></i> Editar
+            </a>
+        }
+        <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+</div>
+
+<div style="max-width:680px;">
+    <div class="card">
+        <div class="card-head">
+            <span class="card-titulo">Información de la Rutina</span>
+            @{
+                var nivelClass = Model.Nivel switch {
+                    NivelRutina.Principiante => "badge-verde",
+                    NivelRutina.Intermedio   => "badge-amarillo",
+                    NivelRutina.Avanzado     => "badge-rojo",
+                    _ => "badge-gris"
+                };
+            }
+            <span class="badge @nivelClass">@Model.Nivel</span>
+        </div>
+        <div class="card-body">
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+                <div>
+                    <div class="form-label">Nombre</div>
+                    <div style="font-size:1rem;font-weight:700;color:var(--blanco);">@Model.Nombre</div>
+                </div>
+                <div>
+                    <div class="form-label">Duración Estimada</div>
+                    <div style="font-size:1rem;font-weight:700;color:var(--amarillo);">
+                        <i class="bi bi-clock"></i> @Model.DuracionEstimadaMinutos minutos
+                    </div>
+                </div>
+                <div>
+                    <div class="form-label">Nivel</div>
+                    <div><span class="badge @nivelClass">@Model.Nivel</span></div>
+                </div>
+                <div>
+                    <div class="form-label">Creada por</div>
+                    <div style="font-size:.95rem;color:var(--blanco2);">
+                        <i class="bi bi-person-fill"></i> @Model.Entrenador?.NombreCompleto
+                    </div>
+                </div>
+                <div>
+                    <div class="form-label">Fecha de Creación</div>
+                    <div style="color:var(--blanco3);font-size:.9rem;">
+                        @Model.FechaCreacion.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+                <div>
+                    <div class="form-label">Estado</div>
+                    <div>
+                        @if (Model.Activa)
+                        {
+                            <span class="badge badge-verde"><i class="bi bi-check-circle"></i> Activa</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-rojo"><i class="bi bi-x-circle"></i> Inactiva</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Descripcion))
+            {
+                <div style="border-top:1px solid var(--borde);padding-top:1.25rem;">
+                    <div class="form-label">Descripción</div>
+                    <div style="color:var(--blanco2);font-size:.92rem;line-height:1.7;">
+                        @Model.Descripcion
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

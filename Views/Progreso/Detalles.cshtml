@@ -1,0 +1,91 @@
+@model GymYanten.Models.ProgresoEntrenamiento
+@{ ViewData["Title"] = "Detalle Progreso"; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">Detalle de Sesión</div>
+        <div class="page-sub">@Model.Fecha.ToString("dd/MM/yyyy") — @Model.Ejercicio?.Nombre</div>
+    </div>
+    <div style="display:flex;gap:.75rem;">
+        <a class="btn-amarillo" asp-action="Editar" asp-route-id="@Model.Id">
+            <i class="bi bi-pencil"></i> Editar
+        </a>
+        <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+</div>
+
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head">
+            <span class="card-titulo">Información de la Sesión</span>
+            <span style="font-size:.8rem;color:var(--amarillo);font-weight:700;">
+                @Model.Fecha.ToString("dd/MM/yyyy")
+            </span>
+        </div>
+        <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+                <div>
+                    <div class="form-label">Ejercicio</div>
+                    <div style="font-weight:700;font-size:.95rem;">@Model.Ejercicio?.Nombre</div>
+                </div>
+                <div>
+                    <div class="form-label">Rutina</div>
+                    <div style="color:var(--blanco2);font-size:.92rem;">@Model.Rutina?.Nombre</div>
+                </div>
+                @if (!User.IsInRole("Cliente"))
+                {
+                    <div>
+                        <div class="form-label">Cliente</div>
+                        <div style="color:var(--blanco2);font-size:.92rem;">
+                            <i class="bi bi-person-fill"></i> @Model.Cliente?.NombreCompleto
+                        </div>
+                    </div>
+                }
+                <div>
+                    <div class="form-label">Fecha</div>
+                    <div style="color:var(--amarillo);font-weight:700;">
+                        @Model.Fecha.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;
+                        background:var(--negro3);border:1px solid var(--borde);
+                        border-radius:var(--r);padding:1.25rem;margin-bottom:1.5rem;">
+                <div style="text-align:center;">
+                    <div class="form-label">Series</div>
+                    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;
+                                color:var(--amarillo);line-height:1;">
+                        @Model.SeriesRealizadas
+                    </div>
+                </div>
+                <div style="text-align:center;border-left:1px solid var(--borde);
+                            border-right:1px solid var(--borde);">
+                    <div class="form-label">Repeticiones</div>
+                    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;
+                                color:var(--amarillo);line-height:1;">
+                        @Model.Repeticiones
+                    </div>
+                </div>
+                <div style="text-align:center;">
+                    <div class="form-label">Peso (kg)</div>
+                    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;
+                                color:var(--amarillo);line-height:1;">
+                        @(Model.PesoUsadoKg.HasValue ? $"{Model.PesoUsadoKg} kg" : "—")
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Notas))
+            {
+                <div style="border-top:1px solid var(--borde);padding-top:1.25rem;">
+                    <div class="form-label">Notas</div>
+                    <div style="color:var(--blanco2);font-size:.92rem;line-height:1.7;">
+                        @Model.Notas
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

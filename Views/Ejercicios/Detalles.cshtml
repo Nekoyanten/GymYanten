@@ -1,0 +1,73 @@
+@model GymYanten.Models.Ejercicio
+@using GymYanten.Models
+@{ ViewData["Title"] = "Detalle Ejercicio"; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">@Model.Nombre</div>
+        <div class="page-sub">Detalle del ejercicio</div>
+    </div>
+    <div style="display:flex;gap:.75rem;">
+        @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.Entrenador))
+        {
+            <a class="btn-amarillo" asp-action="Editar" asp-route-id="@Model.Id">
+                <i class="bi bi-pencil"></i> Editar
+            </a>
+        }
+        <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+</div>
+
+<div style="max-width:620px;">
+    <div class="card">
+        <div class="card-head">
+            <span class="card-titulo">Información del Ejercicio</span>
+            <span class="badge badge-amarillo">@Model.GrupoMuscular</span>
+        </div>
+        <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+                <div>
+                    <div class="form-label">Nombre</div>
+                    <div style="font-size:1rem;font-weight:700;color:var(--blanco);">@Model.Nombre</div>
+                </div>
+                <div>
+                    <div class="form-label">Grupo Muscular</div>
+                    <span class="badge badge-amarillo">@Model.GrupoMuscular</span>
+                </div>
+                <div>
+                    <div class="form-label">Requiere Equipo</div>
+                    @if (Model.RequiereEquipo)
+                    {
+                        <span class="badge badge-rojo"><i class="bi bi-tools"></i> Sí</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-gris">No</span>
+                    }
+                </div>
+                <div>
+                    <div class="form-label">Estado</div>
+                    @if (Model.Activo)
+                    {
+                        <span class="badge badge-verde"><i class="bi bi-check-circle"></i> Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-rojo"><i class="bi bi-x-circle"></i> Inactivo</span>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Descripcion))
+            {
+                <div style="border-top:1px solid var(--borde);padding-top:1.25rem;">
+                    <div class="form-label">Descripción</div>
+                    <div style="color:var(--blanco2);font-size:.92rem;line-height:1.7;">
+                        @Model.Descripcion
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
