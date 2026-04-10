@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — GymYanten</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        :root {
+            --negro:    #0a0a0a;
+            --negro2:   #111111;
+            --negro3:   #1a1a1a;
+            --negro4:   #242424;
+            --borde:    #2e2e2e;
+            --borde2:   #3d3d3d;
+            --amarillo: #FFE600;
+            --amarillo2:#D4BF00;
+            --blanco:   #FFFFFF;
+            --blanco2:  #E8E8E8;
+            --blanco3:  #A0A0A0;
+            --rojo:     #FF3B3B;
+            --verde:    #00E676;
+            --r: 4px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--negro);
+            color: var(--blanco);
+            font-family: 'Barlow', sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ════════════ NAVBAR ════════════ */
+        .gym-nav {
+            background: var(--negro2);
+            border-bottom: 3px solid var(--amarillo);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .gym-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.9rem;
+            letter-spacing: 4px;
+            color: var(--blanco);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .gym-logo em {
+            color: var(--amarillo);
+            font-style: normal;
+        }
+
+        .gym-nav-links {
+            display: flex;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .gym-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ════════════ BOTONES ════════════ */
+        .btn-amarillo {
+            background: var(--amarillo);
+            color: var(--negro);
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: .8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: .5rem 1.25rem;
+            border: none;
+            border-radius: var(--r);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            transition: background .15s, transform .1s;
+            white-space: nowrap;
+        }
+
+        .btn-amarillo:hover { background: #fff04d; color: var(--negro); transform: translateY(-1px); }
+        .btn-amarillo:active { transform: none; }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--blanco2);
+            font-family: 'Barlow', sans-serif;
+            font-weight: 600;
+            font-size: .8rem;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            padding: .5rem 1.1rem;
+            border: 1px solid var(--borde2);
+            border-radius: var(--r);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            transition: border-color .15s, color .15s;
+        }
+
+        .btn-outline:hover { border-color: var(--blanco3); color: var(--blanco); }
+
+        /* ════════════ MAIN ════════════ */
+        main {
+            flex: 1;
+            padding: 2.5rem 2.5rem;
+            max-width: 1320px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ════════════ HERO ════════════ */
+        .hero {
+            padding: 4rem 0 3.5rem;
+            border-bottom: 1px solid var(--borde);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -2.5rem; right: -2.5rem; bottom: 0;
+            background: radial-gradient(ellipse 70% 80% at 50% 0%, rgba(255,230,0,.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-eyebrow {
+            font-size: .72rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--amarillo); margin-bottom: .75rem;
+            display: flex; align-items: center; gap: .5rem;
+        }
+        .hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 2px; background: var(--amarillo); }
+        .hero-titulo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            letter-spacing: 6px; line-height: .95; color: var(--blanco); margin-bottom: 1.25rem;
+        }
+        .hero-titulo em { color: var(--amarillo); font-style: normal; }
+        .hero-desc { font-size: 1rem; color: var(--blanco3); max-width: 500px; margin-bottom: 2rem; line-height: 1.7; }
+        .hero-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+        /* ════════════ FEATURES ════════════ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: .75rem;
+        }
+        .feature-card {
+            background: var(--negro2);
+            border: 1px solid var(--borde);
+            border-radius: var(--r);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 2px; background: var(--amarillo);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform .2s;
+        }
+        .feature-card:hover::after { transform: scaleX(1); }
+        .feature-icon { font-size: 1.4rem; color: var(--amarillo); }
+        .feature-nombre { font-weight: 700; font-size: .95rem; letter-spacing: .5px; color: var(--blanco); }
+        .feature-desc { font-size: .8rem; color: var(--blanco3); }
+
+        .section-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .75rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--blanco3); margin-bottom: 1rem;
+            display: flex; align-items: center; gap: .75rem;
+        }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: var(--borde); }
+
+        /* ════════════ FOOTER ════════════ */
+        footer {
+            background: var(--negro2);
+            border-top: 1px solid var(--borde);
+            padding: 1.1rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: .78rem;
+            color: var(--blanco3);
+        }
+
+        footer strong { color: var(--amarillo); }
+
+        /* ════════════ RESPONSIVE ════════════ */
+        @media (max-width: 768px) {
+            .gym-nav { padding: 0 1rem; gap: 1rem; }
+            .gym-nav-links { display: none; }
+            main { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="gym-nav">
+    <a class="gym-logo" href="/">GYM<em>YANTEN</em></a>
+    <div class="gym-nav-links"></div>
+    <div class="gym-nav-right">
+        <a class="btn-amarillo" href="/Account/Login">
+            <i class="bi bi-box-arrow-in-right"></i> Ingresar
+        </a>
+    </div>
+</nav>
+
+<main>
+    <div class="hero">
+        <div class="hero-eyebrow">Sistema Profesional</div>
+        <div class="hero-titulo">GYM<br/><em>YANTEN</em></div>
+        <p class="hero-desc">Gestiona rutinas, ejercicios y el progreso de cada cliente desde un solo lugar.</p>
+        <div class="hero-actions">
+            <a class="btn-amarillo" href="/Account/Login" style="padding:.7rem 2rem;font-size:.9rem;">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar
+            </a>
+            <a class="btn-outline" href="/Account/Registro" style="padding:.7rem 2rem;font-size:.9rem;">
+                <i class="bi bi-person-plus"></i> Registrarme
+            </a>
+        </div>
+    </div>
+
+    <div class="section-label">Funcionalidades</div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="bi bi-lightning-charge-fill feature-icon"></i>
+            <div class="feature-nombre">Ejercicios</div>
+            <div class="feature-desc">Explora el catalogo completo de ejercicios disponibles</div>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-calendar3-week feature-icon"></i>
+            <div class="feature-nombre">Rutinas</div>
+            <div class="feature-desc">Consulta y gestiona programas de entrenamiento</div>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-plus-circle-fill feature-icon"></i>
+            <div class="feature-nombre">Registrar Sesiones</div>
+            <div class="feature-desc">Anota el entrenamiento de cada dia</div>
+        </div>
+        <div class="feature-card">
+            <i class="bi bi-graph-up-arrow feature-icon"></i>
+            <div class="feature-nombre">Progreso</div>
+            <div class="feature-desc">Revisa el historial y la evolucion de cada cliente</div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <span>&copy; 2026 <strong>GymYanten</strong> — Sistema de Gestion</span>
+    <span>GymYanten</span>
+</footer>
+
+</body>
+</html>
