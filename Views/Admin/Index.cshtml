@@ -1,0 +1,164 @@
+@model List<GymYanten.Models.ViewModels.UsuarioAdminViewModel>
+@{ ViewData["Title"] = "Panel de Administración"; bool inactivos = ViewBag.MostrarInactivos == true; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">Panel Admin</div>
+        <div class="page-sub">Gestión de usuarios y sistema</div>
+    </div>
+    <div style="display:flex;gap:.75rem;">
+        <a class="btn-outline" asp-action="Inactivos">
+            <i class="bi bi-archive"></i> Ver Inactivos
+            @if (ViewBag.TotalInactivos > 0 || ViewBag.TotalEjInactivos > 0 || ViewBag.TotalRutInactivas > 0)
+            {
+                <span style="background:var(--rojo);color:#fff;font-size:.65rem;
+                             padding:.1rem .4rem;border-radius:10px;margin-left:.25rem;">
+                    @((int)ViewBag.TotalInactivos + (int)ViewBag.TotalEjInactivos + (int)ViewBag.TotalRutInactivas)
+                </span>
+            }
+        </a>
+        <a class="btn-amarillo" asp-action="CrearUsuario">
+            <i class="bi bi-person-plus-fill"></i> Nuevo Usuario
+        </a>
+    </div>
+</div>
+
+<!-- Stats -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1px;
+            background:var(--borde);border:1px solid var(--borde);border-radius:var(--r);
+            overflow:hidden;margin-bottom:2.5rem;">
+    @foreach (var (label, valor, sub) in new[]{
+        ("Usuarios Activos",    (object)ViewBag.TotalUsuarios,    ""),
+        ("Entrenadores",        (object)ViewBag.TotalEntrenadores, ""),
+        ("Ejercicios Activos",  (object)ViewBag.TotalEjercicios,   ""),
+        ("Rutinas Activas",     (object)ViewBag.TotalRutinas,      ""),
+        ("Sesiones Registradas",(object)ViewBag.TotalProgreso,     ""),
+    })
+    {
+        <div style="background:var(--negro2);padding:1.25rem 1.5rem;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.4rem;
+                        color:var(--amarillo);line-height:1;">@valor</div>
+            <div style="font-size:.7rem;font-weight:700;letter-spacing:1.2px;
+                        text-transform:uppercase;color:var(--blanco3);margin-top:.3rem;">@label</div>
+        </div>
+    }
+</div>
+
+<!-- Tabla usuarios -->
+<div class="card">
+    <div class="card-head">
+        <span class="card-titulo">Usuarios Activos</span>
+        <span style="font-size:.78rem;color:var(--blanco3);">@Model.Count(u => u.Activo) usuarios</span>
+    </div>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Rol</th>
+                <th>Registro</th>
+                <th style="text-align:right;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model.Where(u => u.Activo))
+            {
+                <tr>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:.75rem;">
+                            <div style="width:34px;height:34px;border-radius:50%;
+                                        background:var(--negro3);border:2px solid var(--amarillo);
+                                        display:flex;align-items:center;justify-content:center;
+                                        font-family:'Bebas Neue',sans-serif;font-size:.9rem;
+                                        color:var(--amarillo);flex-shrink:0;">
+                                @u.NombreCompleto.Substring(0,1).ToUpper()
+                            </div>
+                            <span style="font-weight:700;font-size:.9rem;">@u.NombreCompleto</span>
+                        </div>
+                    </td>
+                    <td style="color:var(--blanco3);font-size:.85rem;">@u.Email</td>
+                    <td style="color:var(--blanco3);font-size:.85rem;">@(u.Telefono ?? "—")</td>
+                    <td>
+                        @{ var rc = u.Rol == "Administrador" ? "badge-rojo" : u.Rol == "Entrenador" ? "badge-amarillo" : "badge-verde"; }
+                        <span class="badge @rc">@u.Rol</span>
+                    </td>
+                    <td style="color:var(--blanco3);font-size:.82rem;white-space:nowrap;">
+                        @u.FechaRegistro.ToString("dd/MM/yyyy")
+                    </td>
+                    <td style="text-align:right;">
+                        <div style="display:flex;gap:.4rem;justify-content:flex-end;">
+                            <a class="btn-outline" asp-action="EditarUsuario" asp-route-id="@u.Id" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button class="btn-outline" title="Cambiar contraseña"
+                                    onclick="abrirModal('@u.Id','@u.NombreCompleto')">
+                                <i class="bi bi-key"></i>
+                            </button>
+                            @if (u.Email != "admin@GymYanten.com")
+                            {
+                                <form asp-action="DesactivarUsuario" method="post" style="margin:0;"
+                                      onsubmit="return confirm('¿Desactivar a @u.NombreCompleto? Sus registros se conservarán.')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@u.Id" />
+                                    <button type="submit" class="btn-peligro" title="Desactivar">
+                                        <i class="bi bi-person-x"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any(u => u.Activo))
+            {
+                <tr><td colspan="6">
+                    <div class="empty"><i class="bi bi-people"></i><p>No hay usuarios activos</p></div>
+                </td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal contraseña -->
+<div id="modal-pass" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);
+     z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:var(--negro2);border:1px solid var(--borde);border-top:3px solid var(--amarillo);
+                border-radius:var(--r);padding:2rem;width:100%;max-width:420px;margin:1rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;
+                    letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;">
+            <i class="bi bi-key-fill" style="color:var(--amarillo);"></i> Cambiar Contraseña
+        </div>
+        <div id="modal-nombre" style="color:var(--blanco3);font-size:.85rem;margin-bottom:1.25rem;"></div>
+        <form asp-action="CambiarContrasena" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="modal-id" name="id" />
+            <div class="form-grupo" style="margin-bottom:1.25rem;">
+                <label class="form-label">Nueva Contraseña</label>
+                <input type="password" name="nuevaContrasena" class="form-ctrl"
+                       placeholder="Mayúscula, número y símbolo" />
+            </div>
+            <div style="display:flex;gap:.75rem;">
+                <button type="submit" class="btn-amarillo"><i class="bi bi-floppy-fill"></i> Guardar</button>
+                <button type="button" class="btn-outline" onclick="cerrarModal()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function abrirModal(id, nombre) {
+    document.getElementById('modal-id').value = id;
+    document.getElementById('modal-nombre').textContent = 'Usuario: ' + nombre;
+    document.getElementById('modal-pass').style.display = 'flex';
+}
+function cerrarModal() {
+    document.getElementById('modal-pass').style.display = 'none';
+}
+document.getElementById('modal-pass').addEventListener('click', function(e) {
+    if (e.target === this) cerrarModal();
+});
+</script>
+}

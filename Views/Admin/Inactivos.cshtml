@@ -1,0 +1,212 @@
+@using GymYanten.Models
+@{
+    ViewData["Title"] = "Registros Inactivos";
+    var usuarios   = ViewBag.UsuariosInactivos   as List<GymYanten.Models.ViewModels.UsuarioAdminViewModel> ?? new();
+    var ejercicios = ViewBag.EjerciciosInactivos as List<Ejercicio> ?? new();
+    var rutinas    = ViewBag.RutinasInactivas    as List<Rutina>    ?? new();
+    int total      = usuarios.Count + ejercicios.Count + rutinas.Count;
+}
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">Registros Inactivos</div>
+        <div class="page-sub">Reactiva usuarios, ejercicios o rutinas desactivados</div>
+    </div>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver al Panel</a>
+</div>
+
+@if (total == 0)
+{
+    <div class="card">
+        <div class="empty">
+            <i class="bi bi-check-circle" style="color:var(--verde);opacity:1;"></i>
+            <p style="color:var(--verde);font-weight:700;">Todo está activo. No hay registros desactivados.</p>
+        </div>
+    </div>
+}
+
+@* ── USUARIOS INACTIVOS ──────────────────────────────────── *@
+@if (usuarios.Any())
+{
+    <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-head">
+            <span class="card-titulo">
+                <i class="bi bi-people" style="color:var(--amarillo);"></i>
+                Usuarios Desactivados
+            </span>
+            <span class="badge badge-rojo">@usuarios.Count</span>
+        </div>
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Fecha Registro</th>
+                    <th style="text-align:right;">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in usuarios)
+                {
+                    <tr style="opacity:.75;">
+                        <td>
+                            <div style="display:flex;align-items:center;gap:.75rem;">
+                                <div style="width:32px;height:32px;border-radius:50%;
+                                            background:var(--negro3);border:1px solid var(--borde);
+                                            display:flex;align-items:center;justify-content:center;
+                                            font-size:.85rem;color:var(--blanco3);flex-shrink:0;">
+                                    @u.NombreCompleto.Substring(0,1).ToUpper()
+                                </div>
+                                <div>
+                                    <div style="font-weight:700;font-size:.9rem;">@u.NombreCompleto</div>
+                                    <div style="font-size:.75rem;color:var(--rojo);">
+                                        <i class="bi bi-x-circle-fill"></i> Desactivado
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="color:var(--blanco3);font-size:.85rem;">@u.Email</td>
+                        <td>
+                            @{ var rc = u.Rol == "Administrador" ? "badge-rojo" : u.Rol == "Entrenador" ? "badge-amarillo" : "badge-verde"; }
+                            <span class="badge @rc">@u.Rol</span>
+                        </td>
+                        <td style="color:var(--blanco3);font-size:.82rem;">
+                            @u.FechaRegistro.ToString("dd/MM/yyyy")
+                        </td>
+                        <td style="text-align:right;">
+                            <form asp-action="ReactivarUsuario" method="post" style="margin:0;"
+                                  onsubmit="return confirm('¿Reactivar a @u.NombreCompleto? Podrá iniciar sesión nuevamente.')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button type="submit" class="btn-outline" style="border-color:var(--verde);color:var(--verde);">
+                                    <i class="bi bi-person-check"></i> Reactivar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div style="padding:.75rem 1.1rem;font-size:.78rem;color:var(--blanco3);
+                    border-top:1px solid var(--borde);background:var(--negro3);">
+            <i class="bi bi-info-circle" style="color:var(--amarillo);"></i>
+            Al reactivar un usuario, todos sus registros de progreso anteriores seguirán disponibles.
+        </div>
+    </div>
+}
+
+@* ── EJERCICIOS INACTIVOS ────────────────────────────────── *@
+@if (ejercicios.Any())
+{
+    <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-head">
+            <span class="card-titulo">
+                <i class="bi bi-lightning-charge" style="color:var(--amarillo);"></i>
+                Ejercicios Desactivados
+            </span>
+            <span class="badge badge-rojo">@ejercicios.Count</span>
+        </div>
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Ejercicio</th>
+                    <th>Grupo Muscular</th>
+                    <th>Requiere Equipo</th>
+                    <th style="text-align:right;">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in ejercicios)
+                {
+                    <tr style="opacity:.75;">
+                        <td style="font-weight:700;">@e.Nombre</td>
+                        <td><span class="badge badge-gris">@e.GrupoMuscular</span></td>
+                        <td>
+                            @if (e.RequiereEquipo)
+                            {<span class="badge badge-gris"><i class="bi bi-tools"></i> Sí</span>}
+                            else
+                            {<span class="badge badge-gris">No</span>}
+                        </td>
+                        <td style="text-align:right;">
+                            <form asp-action="ReactivarEjercicio" method="post" style="margin:0;"
+                                  onsubmit="return confirm('¿Reactivar el ejercicio @e.Nombre?')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@e.Id" />
+                                <button type="submit" class="btn-outline" style="border-color:var(--verde);color:var(--verde);">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Reactivar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div style="padding:.75rem 1.1rem;font-size:.78rem;color:var(--blanco3);
+                    border-top:1px solid var(--borde);background:var(--negro3);">
+            <i class="bi bi-info-circle" style="color:var(--amarillo);"></i>
+            Al reactivar un ejercicio, vuelve a aparecer en el catálogo y en los formularios de progreso.
+        </div>
+    </div>
+}
+
+@* ── RUTINAS INACTIVAS ───────────────────────────────────── *@
+@if (rutinas.Any())
+{
+    <div class="card">
+        <div class="card-head">
+            <span class="card-titulo">
+                <i class="bi bi-calendar3" style="color:var(--amarillo);"></i>
+                Rutinas Desactivadas
+            </span>
+            <span class="badge badge-rojo">@rutinas.Count</span>
+        </div>
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Rutina</th>
+                    <th>Nivel</th>
+                    <th>Duración</th>
+                    <th>Entrenador</th>
+                    <th style="text-align:right;">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in rutinas)
+                {
+                    <tr style="opacity:.75;">
+                        <td style="font-weight:700;">@r.Nombre</td>
+                        <td>
+                            @{
+                                var nc = r.Nivel switch {
+                                    NivelRutina.Principiante => "badge-gris",
+                                    NivelRutina.Intermedio   => "badge-gris",
+                                    _ => "badge-gris"
+                                };
+                            }
+                            <span class="badge badge-gris">@r.Nivel</span>
+                        </td>
+                        <td style="color:var(--blanco3);font-size:.85rem;">@r.DuracionEstimadaMinutos min</td>
+                        <td style="color:var(--blanco3);font-size:.85rem;">@r.Entrenador?.NombreCompleto</td>
+                        <td style="text-align:right;">
+                            <form asp-action="ReactivarRutina" method="post" style="margin:0;"
+                                  onsubmit="return confirm('¿Reactivar la rutina @r.Nombre?')">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@r.Id" />
+                                <button type="submit" class="btn-outline" style="border-color:var(--verde);color:var(--verde);">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Reactivar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div style="padding:.75rem 1.1rem;font-size:.78rem;color:var(--blanco3);
+                    border-top:1px solid var(--borde);background:var(--negro3);">
+            <i class="bi bi-info-circle" style="color:var(--amarillo);"></i>
+            Al reactivar una rutina, vuelve a estar disponible para los entrenadores y clientes.
+        </div>
+    </div>
+}

@@ -137,9 +137,12 @@ namespace GymYanten.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = $"{Roles.Administrador},{Roles.Entrenador}")]
         public async Task<IActionResult> Editar(int id,
-            [Bind("Id,Nombre,Descripcion,Nivel,DuracionEstimadaMinutos,EntrenadorId,FechaCreacion,Activa")] Rutina rutina)
+     [Bind("Id,Nombre,Descripcion,Nivel,DuracionEstimadaMinutos,EntrenadorId,FechaCreacion,Activa")] Rutina rutina)
         {
             if (id != rutina.Id) return NotFound();
+
+            // ↓ AGREGAR ESTAS DOS LÍNEAS
+            ModelState.Remove("Entrenador");
 
             if (ModelState.IsValid)
             {

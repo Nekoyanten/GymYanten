@@ -1,0 +1,72 @@
+@model GymYanten.Models.ViewModels.EditarUsuarioViewModel
+@{ ViewData["Title"] = "Editar Usuario"; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">Editar Usuario</div>
+        <div class="page-sub">@Model.Nombre @Model.Apellido</div>
+    </div>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+
+<div style="max-width:580px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Modificar Datos</span></div>
+        <div class="card-body">
+            <div asp-validation-summary="All" class="val-errors"></div>
+            <form asp-action="EditarUsuario" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-ctrl" />
+                        <span asp-validation-for="Nombre" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo">
+                        <label asp-for="Apellido" class="form-label"></label>
+                        <input asp-for="Apellido" class="form-ctrl" />
+                        <span asp-validation-for="Apellido" class="form-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-grupo">
+                    <label class="form-label">Email</label>
+                    <input value="@Model.Email" class="form-ctrl" disabled
+                           style="opacity:.5;cursor:not-allowed;" />
+                    <span style="font-size:.75rem;color:var(--blanco3);margin-top:.3rem;display:block;">
+                        El email no puede modificarse
+                    </span>
+                </div>
+
+                <div class="form-grupo">
+                    <label asp-for="Telefono" class="form-label"></label>
+                    <input asp-for="Telefono" class="form-ctrl" />
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="Rol" class="form-label"></label>
+                        <select asp-for="Rol" class="form-ctrl" asp-items="ViewBag.Roles"></select>
+                        <span asp-validation-for="Rol" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo" style="display:flex;flex-direction:column;justify-content:flex-end;">
+                        <div class="form-check-row" style="margin-bottom:0;padding-bottom:.65rem;">
+                            <input asp-for="Activo" type="checkbox" />
+                            <label asp-for="Activo" class="form-check-label">Usuario activo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:.75rem;padding-top:.5rem;">
+                    <button type="submit" class="btn-amarillo">
+                        <i class="bi bi-floppy-fill"></i> Guardar Cambios
+                    </button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+@model GymYanten.Models.ViewModels.CrearUsuarioViewModel
+@{ ViewData["Title"] = "Nuevo Usuario"; }
+
+<div class="page-head">
+    <div>
+        <div class="acento"></div>
+        <div class="page-titulo">Nuevo Usuario</div>
+        <div class="page-sub">Crea un Administrador, Entrenador o Cliente</div>
+    </div>
+    <a class="btn-outline" asp-action="Index"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+
+<div style="max-width:580px;">
+    <div class="card">
+        <div class="card-head"><span class="card-titulo">Datos del Usuario</span></div>
+        <div class="card-body">
+            <div asp-validation-summary="All" class="val-errors"></div>
+            <form asp-action="CrearUsuario" method="post">
+                @Html.AntiForgeryToken()
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-ctrl" placeholder="Juan" />
+                        <span asp-validation-for="Nombre" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo">
+                        <label asp-for="Apellido" class="form-label"></label>
+                        <input asp-for="Apellido" class="form-ctrl" placeholder="Pérez" />
+                        <span asp-validation-for="Apellido" class="form-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-grupo">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-ctrl" type="email"
+                           placeholder="correo@ejemplo.com" />
+                    <span asp-validation-for="Email" class="form-error"></span>
+                </div>
+
+                <div class="form-grupo">
+                    <label asp-for="Telefono" class="form-label"></label>
+                    <input asp-for="Telefono" class="form-ctrl" placeholder="+57 300 000 0000" />
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div class="form-grupo">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-ctrl" type="password"
+                               placeholder="Mín. 8 caracteres" />
+                        <span asp-validation-for="Password" class="form-error"></span>
+                    </div>
+                    <div class="form-grupo">
+                        <label asp-for="Rol" class="form-label"></label>
+                        <select asp-for="Rol" class="form-ctrl" asp-items="ViewBag.Roles">
+                        </select>
+                        <span asp-validation-for="Rol" class="form-error"></span>
+                    </div>
+                </div>
+
+                <div style="background:var(--negro3);border:1px solid var(--borde);
+                            border-radius:var(--r);padding:1rem;margin-bottom:1.5rem;
+                            font-size:.82rem;color:var(--blanco3);">
+                    <i class="bi bi-info-circle" style="color:var(--amarillo);"></i>
+                    La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo especial.
+                </div>
+
+                <div style="display:flex;gap:.75rem;">
+                    <button type="submit" class="btn-amarillo">
+                        <i class="bi bi-person-check-fill"></i> Crear Usuario
+                    </button>
+                    <a asp-action="Index" class="btn-outline">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
