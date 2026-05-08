@@ -7,7 +7,16 @@
         <div class="page-titulo">Mi Progreso</div>
         <div class="page-sub">Historial de sesiones de entrenamiento</div>
     </div>
-    <a class="btn-amarillo" asp-action="Registrar"><i class="bi bi-plus-lg"></i> Registrar Sesión</a>
+    <div style="display:flex;gap:.6rem;align-items:center;">
+        <a class="btn-outline"
+           href="/ayuda/progreso.html"
+           target="_blank"
+           title="Guía Rápida: Módulo de Progreso"
+           style="border-color:rgba(255,230,0,.4);color:var(--amarillo);gap:.4rem;">
+            <i class="bi bi-question-circle-fill"></i> Ayuda
+        </a>
+        <a class="btn-amarillo" asp-action="Registrar"><i class="bi bi-plus-lg"></i> Registrar Sesión</a>
+    </div>
 </div>
 
 <!-- Filtros -->

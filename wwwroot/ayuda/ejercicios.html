@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GymYanten — Ayuda en Línea: Ejercicios</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0A0F1A;
+    --surface: #111827;
+    --surface2: #1C2537;
+    --border: #2A3548;
+    --accent: #38BDF8;
+    --accent2: #F472B6;
+    --accent3: #34D399;
+    --warn: #FB923C;
+    --text: #E2E8F0;
+    --muted: #64748B;
+    --tag-bg: #1E3A5F;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 16px; }
+  .logo { font-weight: 700; font-size: 18px; color: var(--accent); letter-spacing: -0.5px; }
+  .module-badge {
+    background: var(--tag-bg);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    gap: 8px;
+    width: 280px;
+  }
+  .search-wrap input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    width: 100%;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-icon { color: var(--muted); font-size: 14px; }
+
+  /* LAYOUT */
+  .layout { display: flex; flex: 1; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    position: sticky;
+    top: 56px;
+  }
+  .sidebar-section { margin-bottom: 4px; }
+  .sidebar-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 20px 4px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-item:hover { background: var(--surface2); color: var(--text); }
+  .sidebar-item.active {
+    background: rgba(56,189,248,0.08);
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  .sidebar-item .icon { font-size: 15px; width: 20px; }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 860px;
+    overflow-y: auto;
+  }
+
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .hero {
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56,189,248,0.1);
+    border: 1px solid rgba(56,189,248,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .hero h1 { font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+  .hero p { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 560px; }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  h3 { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 10px; }
+
+  p { color: var(--muted); font-size: 14px; line-height: 1.75; margin-bottom: 14px; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(56,189,248,0.1); }
+  .card-icon { font-size: 28px; margin-bottom: 10px; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .card-desc { font-size: 12px; color: var(--muted); }
+
+  /* STEPS */
+  .steps { margin-bottom: 32px; }
+  .step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    width: 2px;
+    height: calc(100% - 10px);
+    background: var(--border);
+  }
+  .step-num {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    z-index: 1;
+  }
+  .step-num.create { background: rgba(56,189,248,0.15); color: var(--accent); border: 2px solid var(--accent); }
+  .step-num.edit { background: rgba(244,114,182,0.15); color: var(--accent2); border: 2px solid var(--accent2); }
+  .step-num.delete { background: rgba(251,146,60,0.15); color: var(--warn); border: 2px solid var(--warn); }
+  .step-num.list { background: rgba(52,211,153,0.15); color: var(--accent3); border: 2px solid var(--accent3); }
+  .step-body { flex: 1; padding-top: 8px; }
+  .step-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* FIELDS TABLE */
+  .fields-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px; }
+  .fields-table th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .fields-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  .fields-table tr:hover td { background: var(--surface2); color: var(--text); }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag.req { background: rgba(56,189,248,0.15); color: var(--accent); }
+  .tag.opt { background: var(--surface2); color: var(--muted); }
+
+  /* ALERT BOXES */
+  .alert {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 1.65;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alert.info { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); color: var(--accent); }
+  .alert.warn { background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.25); color: var(--warn); }
+  .alert.success { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: var(--accent3); }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-text { color: var(--text); }
+  .alert-text strong { color: inherit; }
+
+  /* CODE */
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent3);
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+
+  /* ACCORDION */
+  .accordion { margin-bottom: 32px; }
+  .acc-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .acc-header {
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--surface);
+    transition: background 0.15s;
+  }
+  .acc-header:hover { background: var(--surface2); }
+  .acc-header.open { color: var(--accent); }
+  .acc-chevron { transition: transform 0.2s; color: var(--muted); font-size: 12px; }
+  .acc-header.open .acc-chevron { transform: rotate(180deg); }
+  .acc-body {
+    display: none;
+    padding: 16px 18px;
+    background: var(--surface2);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+  }
+  .acc-body.open { display: block; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-left">
+    <span class="logo">🏋️ GymYanten</span>
+    <span class="module-badge">💪 Ejercicios</span>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Buscar en la ayuda..." oninput="filterHelp(this.value)">
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Inicio</div>
+      <div class="sidebar-item active" onclick="showSection('overview', this)">
+        <span class="icon">🏠</span> Descripción general
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Operaciones CRUD</div>
+      <div class="sidebar-item" onclick="showSection('crear', this)">
+        <span class="icon">➕</span> Crear ejercicio
+      </div>
+      <div class="sidebar-item" onclick="showSection('listar', this)">
+        <span class="icon">📋</span> Ver ejercicios
+      </div>
+      <div class="sidebar-item" onclick="showSection('editar', this)">
+        <span class="icon">✏️</span> Editar ejercicio
+      </div>
+      <div class="sidebar-item" onclick="showSection('eliminar', this)">
+        <span class="icon">🗑️</span> Eliminar ejercicio
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Referencia</div>
+      <div class="sidebar-item" onclick="showSection('campos', this)">
+        <span class="icon">📝</span> Campos del formulario
+      </div>
+      <div class="sidebar-item" onclick="showSection('errores', this)">
+        <span class="icon">⚠️</span> Errores comunes
+      </div>
+      <div class="sidebar-item" onclick="showSection('faq', this)">
+        <span class="icon">❓</span> Preguntas frecuentes
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <div class="section active" id="sec-overview">
+      <div class="hero">
+        <div class="hero-tag">💪 Módulo Ejercicios</div>
+        <h1>Gestión de Ejercicios</h1>
+        <p>Administra el catálogo completo de ejercicios de GymYanten. Crea, visualiza, edita y elimina ejercicios para construir rutinas de entrenamiento personalizadas.</p>
+      </div>
+
+      <h2>¿Qué puedes hacer?</h2>
+      <div class="card-grid">
+        <div class="card" onclick="showSection('crear', document.querySelector('[onclick*=crear]'))">
+          <div class="card-icon">➕</div>
+          <div class="card-title">Crear ejercicio</div>
+          <div class="card-desc">Agrega nuevos ejercicios al catálogo con nombre, categoría, descripción y media.</div>
+        </div>
+        <div class="card" onclick="showSection('listar', document.querySelector('[onclick*=listar]'))">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Ver ejercicios</div>
+          <div class="card-desc">Explora el catálogo completo, filtra por categoría, grupo muscular o dificultad.</div>
+        </div>
+        <div class="card" onclick="showSection('editar', document.querySelector('[onclick*=editar]'))">
+          <div class="card-icon">✏️</div>
+          <div class="card-title">Editar ejercicio</div>
+          <div class="card-desc">Modifica los datos de cualquier ejercicio existente en el sistema.</div>
+        </div>
+        <div class="card" onclick="showSection('eliminar', document.querySelector('[onclick*=eliminar]'))">
+          <div class="card-icon">🗑️</div>
+          <div class="card-title">Eliminar ejercicio</div>
+          <div class="card-desc">Elimina ejercicios del catálogo. Solo disponible para administradores.</div>
+        </div>
+      </div>
+
+      <div class="alert info">
+        <span class="alert-icon">ℹ️</span>
+        <span class="alert-text"><strong>Permisos:</strong> Los usuarios estándar pueden ver el catálogo y buscar ejercicios. Solo los <strong>administradores</strong> pueden crear, editar y eliminar ejercicios.</span>
+      </div>
+    </div>
+
+    <!-- CREAR -->
+    <div class="section" id="sec-crear">
+      <div class="hero">
+        <div class="hero-tag">➕ Crear</div>
+        <h1>Crear un Ejercicio</h1>
+        <p>Agrega un nuevo ejercicio al catálogo de GymYanten completando el formulario con toda la información necesaria.</p>
+      </div>
+
+      <h2>Pasos para crear</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num create">1</div>
+          <div class="step-body">
+            <div class="step-title">Acceder al módulo de Ejercicios</div>
+            <div class="step-desc">En el menú lateral, hacer clic en <strong>"Ejercicios"</strong>. Se mostrará el catálogo actual.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num create">2</div>
+          <div class="step-body">
+            <div class="step-title">Hacer clic en "Nuevo Ejercicio"</div>
+            <div class="step-desc">Botón ubicado en la esquina superior derecha del catálogo. Solo visible para administradores.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num create">3</div>
+          <div class="step-body">
+            <div class="step-title">Completar el formulario</div>
+            <div class="step-desc">Ingresa todos los campos requeridos: nombre, categoría, grupo muscular, dificultad y descripción detallada.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num create">4</div>
+          <div class="step-body">
+            <div class="step-title">Agregar media (opcional)</div>
+            <div class="step-desc">Sube una imagen ilustrativa o ingresa la URL de un video demostrativo del ejercicio.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num create">5</div>
+          <div class="step-body">
+            <div class="step-title">Guardar el ejercicio</div>
+            <div class="step-desc">Hacer clic en <strong>"Guardar"</strong>. El ejercicio quedará disponible inmediatamente en el catálogo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert success">
+        <span class="alert-icon">✅</span>
+        <span class="alert-text">El sistema validará automáticamente que no exista otro ejercicio con el mismo nombre antes de guardar.</span>
+      </div>
+    </div>
+
+    <!-- LISTAR -->
+    <div class="section" id="sec-listar">
+      <div class="hero">
+        <div class="hero-tag">📋 Consultar</div>
+        <h1>Ver el Catálogo de Ejercicios</h1>
+        <p>Explora todos los ejercicios disponibles. Puedes filtrar, buscar y ver el detalle de cada ejercicio.</p>
+      </div>
+
+      <h2>Opciones de búsqueda y filtrado</h2>
+
+      <h3>Búsqueda por nombre</h3>
+      <p>Usa la barra de búsqueda en la parte superior del catálogo para encontrar ejercicios por su nombre. La búsqueda es en tiempo real.</p>
+
+      <h3>Filtros disponibles</h3>
+      <table class="fields-table">
+        <thead>
+          <tr><th>Filtro</th><th>Opciones</th><th>Descripción</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Categoría</td><td>Fuerza, Cardio, Flexibilidad, HIIT, Funcional</td><td>Tipo de ejercicio según el objetivo</td></tr>
+          <tr><td>Grupo muscular</td><td>Pecho, Espalda, Piernas, Hombros, Bíceps, Tríceps, Core, Glúteos</td><td>Músculo principal trabajado</td></tr>
+          <tr><td>Dificultad</td><td>Principiante, Intermedio, Avanzado</td><td>Nivel de exigencia física</td></tr>
+          <tr><td>Equipamiento</td><td>Sin equipamiento, Mancuernas, Barra, Máquinas, Bandas</td><td>Material necesario</td></tr>
+        </tbody>
+      </table>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num list">1</div>
+          <div class="step-body">
+            <div class="step-title">Ir a Ejercicios en el menú</div>
+            <div class="step-desc">Se cargará el catálogo con todos los ejercicios disponibles.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num list">2</div>
+          <div class="step-body">
+            <div class="step-title">Aplicar filtros (opcional)</div>
+            <div class="step-desc">Usar los selectores de la barra superior para filtrar por categoría, grupo muscular o dificultad.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num list">3</div>
+          <div class="step-body">
+            <div class="step-title">Hacer clic en un ejercicio para ver su detalle</div>
+            <div class="step-desc">Se abrirá una vista con la descripción completa, instrucciones, músculos trabajados y media asociada.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDITAR -->
+    <div class="section" id="sec-editar">
+      <div class="hero">
+        <div class="hero-tag">✏️ Editar</div>
+        <h1>Editar un Ejercicio</h1>
+        <p>Modifica los datos de cualquier ejercicio existente. Esta función está reservada para administradores.</p>
+      </div>
+
+      <div class="alert warn">
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-text"><strong>Atención:</strong> Los cambios en un ejercicio afectarán todas las rutinas que lo incluyan. Asegúrate de que la información actualizada sea correcta.</span>
+      </div>
+
+      <h2>Pasos para editar</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num edit">1</div>
+          <div class="step-body">
+            <div class="step-title">Encontrar el ejercicio a editar</div>
+            <div class="step-desc">Usa la búsqueda o filtros para localizar el ejercicio en el catálogo.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num edit">2</div>
+          <div class="step-body">
+            <div class="step-title">Abrir el menú de opciones</div>
+            <div class="step-desc">Hacer clic en el ícono ⋮ (tres puntos) de la tarjeta del ejercicio y seleccionar <strong>"Editar"</strong>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num edit">3</div>
+          <div class="step-body">
+            <div class="step-title">Modificar los campos necesarios</div>
+            <div class="step-desc">El formulario se cargará con los datos actuales. Modifica únicamente los campos que necesitas actualizar.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num edit">4</div>
+          <div class="step-body">
+            <div class="step-title">Guardar los cambios</div>
+            <div class="step-desc">Hacer clic en <strong>"Actualizar ejercicio"</strong>. Los cambios se aplican inmediatamente.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELIMINAR -->
+    <div class="section" id="sec-eliminar">
+      <div class="hero">
+        <div class="hero-tag">🗑️ Eliminar</div>
+        <h1>Eliminar un Ejercicio</h1>
+        <p>Elimina ejercicios del catálogo. Esta es una acción irreversible y solo puede realizarla un administrador.</p>
+      </div>
+
+      <div class="alert warn">
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-text"><strong>Importante:</strong> Si el ejercicio está incluido en rutinas activas, el sistema mostrará una advertencia. Al eliminarlo, se removerá de todas las rutinas que lo contienen.</span>
+      </div>
+
+      <h2>Pasos para eliminar</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num delete">1</div>
+          <div class="step-body">
+            <div class="step-title">Localizar el ejercicio en el catálogo</div>
+            <div class="step-desc">Busca el ejercicio usando la barra de búsqueda o los filtros disponibles.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num delete">2</div>
+          <div class="step-body">
+            <div class="step-title">Seleccionar "Eliminar" del menú</div>
+            <div class="step-desc">Clic en ⋮ y luego en <strong>"Eliminar"</strong>. Aparecerá un cuadro de confirmación.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num delete">3</div>
+          <div class="step-body">
+            <div class="step-title">Confirmar la eliminación</div>
+            <div class="step-desc">Leer el mensaje de confirmación. Si el ejercicio está en rutinas, se mostrará la lista afectada. Escribir el nombre del ejercicio para confirmar.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num delete">4</div>
+          <div class="step-body">
+            <div class="step-title">Hacer clic en "Confirmar eliminación"</div>
+            <div class="step-desc">El ejercicio se eliminará permanentemente del sistema. Esta acción no puede deshacerse.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPOS -->
+    <div class="section" id="sec-campos">
+      <div class="hero">
+        <div class="hero-tag">📝 Referencia</div>
+        <h1>Campos del Formulario</h1>
+        <p>Referencia completa de todos los campos disponibles en el formulario de creación y edición de ejercicios.</p>
+      </div>
+
+      <h2>Campos disponibles</h2>
+      <table class="fields-table">
+        <thead>
+          <tr><th>Campo</th><th>Tipo</th><th>Descripción</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Nombre</td><td>Texto</td><td>Nombre único del ejercicio. Máx. 100 caracteres.</td><td><span class="tag req">Requerido</span></td></tr>
+          <tr><td>Categoría</td><td>Selector</td><td>Clasificación principal: Fuerza, Cardio, Flexibilidad, HIIT, Funcional.</td><td><span class="tag req">Requerido</span></td></tr>
+          <tr><td>Grupo muscular</td><td>Selector múltiple</td><td>Músculos que trabaja el ejercicio. Se puede seleccionar más de uno.</td><td><span class="tag req">Requerido</span></td></tr>
+          <tr><td>Dificultad</td><td>Selector</td><td>Nivel: Principiante / Intermedio / Avanzado.</td><td><span class="tag req">Requerido</span></td></tr>
+          <tr><td>Descripción</td><td>Texto largo</td><td>Instrucciones detalladas de ejecución. Máx. 1000 caracteres.</td><td><span class="tag req">Requerido</span></td></tr>
+          <tr><td>Equipamiento</td><td>Selector múltiple</td><td>Material necesario para realizar el ejercicio.</td><td><span class="tag opt">Opcional</span></td></tr>
+          <tr><td>Series recomendadas</td><td>Número</td><td>Número sugerido de series. Rango: 1–10.</td><td><span class="tag opt">Opcional</span></td></tr>
+          <tr><td>Repeticiones</td><td>Número / Texto</td><td>Repeticiones por serie o duración (ej: "12 reps" o "30 seg").</td><td><span class="tag opt">Opcional</span></td></tr>
+          <tr><td>Imagen</td><td>Archivo / URL</td><td>Imagen ilustrativa. Formatos: JPG, PNG, WebP. Máx. 5MB.</td><td><span class="tag opt">Opcional</span></td></tr>
+          <tr><td>URL de video</td><td>URL</td><td>Enlace a video demostrativo (YouTube o similar).</td><td><span class="tag opt">Opcional</span></td></tr>
+          <tr><td>Notas adicionales</td><td>Texto</td><td>Precauciones, variantes o consejos del ejercicio.</td><td><span class="tag opt">Opcional</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ERRORES -->
+    <div class="section" id="sec-errores">
+      <div class="hero">
+        <div class="hero-tag">⚠️ Errores</div>
+        <h1>Errores Comunes</h1>
+        <p>Soluciones rápidas para los problemas más frecuentes al gestionar ejercicios.</p>
+      </div>
+
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>❌ "El ejercicio ya existe"</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">Ya existe un ejercicio con ese nombre exacto en el sistema. Usa un nombre diferente o busca el ejercicio existente para editarlo si necesitas modificarlo.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>❌ "Imagen demasiado grande"</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">La imagen supera el límite de 5MB. Comprime la imagen antes de subirla. Puedes usar herramientas gratuitas como squoosh.app o tinypng.com para reducir el tamaño sin perder calidad visible.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>❌ "No tienes permisos para esta acción"</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">Las operaciones de creación, edición y eliminación requieren rol de Administrador. Si crees que deberías tener acceso, contacta al administrador del sistema para que actualice tu rol.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>❌ "Error al guardar: campos inválidos"</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">Uno o más campos requeridos no están completos o contienen información inválida. El formulario marcará en rojo los campos con error. Completa todos los campos obligatorios (marcados con asterisco *) antes de guardar.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>❌ "El video no puede ser mostrado"</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">La URL del video no es válida o el video no está disponible públicamente. Asegúrate de usar la URL completa del video (ej: https://youtube.com/watch?v=...) y que el video esté configurado como público o no listado en YouTube.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section" id="sec-faq">
+      <div class="hero">
+        <div class="hero-tag">❓ FAQ</div>
+        <h1>Preguntas Frecuentes</h1>
+        <p>Respuestas a las preguntas más comunes sobre el módulo de ejercicios.</p>
+      </div>
+
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>¿Puedo duplicar un ejercicio existente?</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">Sí. En el menú ⋮ del ejercicio, selecciona "Duplicar". Se creará una copia con el prefijo "Copia de..." que luego puedes editar con el nombre y datos que necesites.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>¿Puedo agregar un ejercicio a una rutina desde el catálogo?</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">Sí. En la vista de detalle del ejercicio encontrarás el botón "Agregar a rutina". Podrás seleccionar a cuál de tus rutinas activas deseas agregarlo directamente.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>¿Cómo sé cuántas rutinas usan un ejercicio?</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">En la vista de detalle del ejercicio (solo para administradores), hay una sección "Usado en rutinas" que muestra cuántas y cuáles rutinas activas incluyen este ejercicio.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>¿Los cambios en un ejercicio afectan el historial de progreso?</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">No. El historial de progreso mantiene la referencia original del ejercicio. Solo el nombre mostrado en el catálogo y en las rutinas futuras se verá afectado por las ediciones.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-header" onclick="toggleAcc(this)">
+            <span>¿Hay un límite de ejercicios que puedo crear?</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+          <div class="acc-body">No hay límite en el número de ejercicios del catálogo. Sin embargo, se recomienda mantener el catálogo organizado con nombres claros y categorías correctas para facilitar la búsqueda.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function showSection(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.acc-header').forEach(h => h.classList.remove('open'));
+  document.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
+  if (!isOpen) {
+    header.classList.add('open');
+    body.classList.add('open');
+  }
+}
+
+function filterHelp(q) {
+  if (!q.trim()) return;
+  const sections = ['overview','crear','listar','editar','eliminar','campos','errores','faq'];
+  const lower = q.toLowerCase();
+  let found = 'overview';
+  const keywords = {
+    crear: ['crear','nuevo','agregar','añadir','form'],
+    listar: ['ver','listar','buscar','filtrar','catálogo','catalogo'],
+    editar: ['editar','modificar','cambiar','actualizar'],
+    eliminar: ['eliminar','borrar','quitar','remover'],
+    campos: ['campo','formulario','nombre','categoría','dificultad','imagen'],
+    errores: ['error','problema','falla','no puedo','inválido'],
+    faq: ['pregunta','faq','duda','cómo','cuando'],
+  };
+  for (const [sec, words] of Object.entries(keywords)) {
+    if (words.some(w => lower.includes(w))) { found = sec; break; }
+  }
+  const item = document.querySelector(`[onclick*="${found}"]`);
+  showSection(found, item);
+}
+</script>
+</body>
+</html>

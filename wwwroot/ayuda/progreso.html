@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GymYanten — Guía de Inicio Rápido: Progreso</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #F7F5F0;
+    --ink: #1A1A18;
+    --surface: #FFFFFF;
+    --border: #E2DDD6;
+    --green: #16A34A;
+    --green-light: #DCFCE7;
+    --orange: #EA580C;
+    --orange-light: #FFF7ED;
+    --blue: #2563EB;
+    --blue-light: #EFF6FF;
+    --purple: #7C3AED;
+    --purple-light: #F5F3FF;
+    --text: #1A1A18;
+    --muted: #6B7280;
+    --step-line: #E2DDD6;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO STRIP */
+  .hero-strip {
+    background: var(--ink);
+    color: white;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    min-height: 300px;
+  }
+  .hero-left {
+    padding: 52px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-kicker {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: #9CA3AF; margin-bottom: 20px;
+  }
+  .kicker-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px; line-height: 0.9;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+  .hero-title .highlight { color: #4ADE80; }
+  .hero-sub { color: #9CA3AF; font-size: 15px; line-height: 1.6; max-width: 440px; margin-bottom: 28px; }
+  .hero-meta { display: flex; gap: 24px; }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: #4ADE80; }
+  .hero-stat-label { font-size: 11px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; }
+  .hero-right {
+    background: #111;
+    border-left: 1px solid #2D2D2D;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+  .hero-right-title { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+  /* QUICK NAV BUTTONS */
+  .qnav {
+    display: flex; align-items: center; gap: 12px;
+    background: #1C1C1C; border: 1px solid #2D2D2D;
+    border-radius: 8px; padding: 12px 16px;
+    cursor: pointer; transition: border-color 0.15s;
+    text-decoration: none;
+  }
+  .qnav:hover { border-color: #4ADE80; }
+  .qnav-num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #4ADE80; min-width: 28px; }
+  .qnav-text { font-size: 13px; color: #D1D5DB; font-weight: 500; }
+  .qnav-arrow { margin-left: auto; color: #4B5563; font-size: 12px; }
+
+  /* CONTAINER */
+  .container { max-width: 900px; margin: 0 auto; padding: 64px 48px; }
+
+  /* SECTION */
+  .section { margin-bottom: 64px; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; gap: 20px; align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; line-height: 0.8;
+    color: var(--border); min-width: 64px;
+  }
+  .section-header-right {}
+  .section-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--muted); margin-bottom: 6px;
+  }
+  .section-title { font-size: 26px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .section-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* STEP FLOW */
+  .step-flow { position: relative; padding-left: 44px; }
+  .step-flow::before {
+    content: '';
+    position: absolute; left: 15px; top: 20px;
+    width: 2px; bottom: 20px;
+    background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 8px, transparent 8px, transparent 16px);
+  }
+  .step-item {
+    position: relative; margin-bottom: 24px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .step-item:hover { border-color: var(--green); box-shadow: 0 4px 20px rgba(22,163,74,0.08); }
+  .step-dot {
+    position: absolute; left: -36px; top: 18px;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    background: var(--green); color: white;
+    z-index: 1;
+  }
+  .step-action {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--green); margin-bottom: 6px;
+  }
+  .step-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .step-text { font-size: 13px; color: var(--muted); line-height: 1.65; }
+  .step-tip {
+    margin-top: 10px; padding: 8px 12px;
+    background: var(--green-light); border-radius: 6px;
+    font-size: 12px; color: var(--green); font-weight: 500;
+  }
+
+  /* QUICK REFERENCE TABLE */
+  .qref-table { width: 100%; border-collapse: collapse; }
+  .qref-table th {
+    background: var(--ink); color: white;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; padding: 12px 16px; text-align: left;
+  }
+  .qref-table td {
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    font-size: 13px; background: var(--surface);
+  }
+  .qref-table tr:hover td { background: #F9FAFB; }
+  .qref-table td:first-child { font-weight: 600; color: var(--ink); width: 220px; }
+  .qref-table td:last-child { color: var(--muted); }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+  }
+  .badge.green { background: var(--green-light); color: var(--green); }
+  .badge.orange { background: var(--orange-light); color: var(--orange); }
+  .badge.blue { background: var(--blue-light); color: var(--blue); }
+  .badge.purple { background: var(--purple-light); color: var(--purple); }
+
+  /* ALERT */
+  .alert {
+    border-radius: 10px; padding: 16px 20px;
+    margin-bottom: 20px; display: flex; gap: 14px; align-items: flex-start;
+  }
+  .alert.green { background: var(--green-light); border: 1px solid rgba(22,163,74,0.3); }
+  .alert.orange { background: var(--orange-light); border: 1px solid rgba(234,88,12,0.3); }
+  .alert.blue { background: var(--blue-light); border: 1px solid rgba(37,99,235,0.3); }
+  .alert-emoji { font-size: 20px; flex-shrink: 0; }
+  .alert-body { font-size: 13px; line-height: 1.65; }
+  .alert.green .alert-body { color: #14532D; }
+  .alert.orange .alert-body { color: #7C2D12; }
+  .alert.blue .alert-body { color: #1E3A8A; }
+
+  /* METRICS GRID */
+  .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+  .metric-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px;
+    position: relative; overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .metric-card.green::before { background: var(--green); }
+  .metric-card.orange::before { background: var(--orange); }
+  .metric-card.blue::before { background: var(--blue); }
+  .metric-card.purple::before { background: var(--purple); }
+  .metric-icon { font-size: 28px; margin-bottom: 10px; }
+  .metric-name { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px; }
+  .metric-value { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; }
+  .metric-card.green .metric-value { color: var(--green); }
+  .metric-card.orange .metric-value { color: var(--orange); }
+  .metric-card.blue .metric-value { color: var(--blue); }
+  .metric-card.purple .metric-value { color: var(--purple); }
+  .metric-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* SHORTCUT TABLE */
+  .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .shortcut {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+  }
+  .shortcut-icon { font-size: 20px; }
+  .shortcut-text { font-size: 13px; }
+  .shortcut-title { font-weight: 600; color: var(--ink); }
+  .shortcut-sub { color: var(--muted); font-size: 12px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); color: #6B7280;
+    padding: 28px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #4ADE80; letter-spacing: 1px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* PRINT */
+  @media print {
+    .hero-strip { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .step-item { break-inside: avoid; }
+    footer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero-strip">
+  <div class="hero-left">
+    <div>
+      <div class="hero-kicker">
+        <span class="kicker-dot"></span>
+        GymYanten — Guía de Inicio Rápido
+      </div>
+      <div class="hero-title">
+        PROGRESO DE<br>
+        <span class="highlight">ENTRENAMIENTO</span>
+      </div>
+      <div class="hero-sub">
+        Todo lo que necesitas para registrar y analizar tu progreso en GymYanten. Desde tu primera sesión hasta ver tus estadísticas históricas.
+      </div>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Pasos clave</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">~3</div>
+        <div class="hero-stat-label">Min de lectura</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-label">Para usuarios</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-title">Saltar a una sección</div>
+    <a class="qnav" href="#sec1">
+      <span class="qnav-num">1</span>
+      <span class="qnav-text">Acceder al módulo</span>
+      <span class="qnav-arrow">→</span>
+    </a>
+    <a class="qnav" href="#sec2">
+      <span class="qnav-num">2</span>
+      <span class="qnav-text">Registrar una sesión</span>
+      <span class="qnav-arrow">→</span>
+    </a>
+    <a class="qnav" href="#sec3">
+      <span class="qnav-num">3</span>
+      <span class="qnav-text">Ver métricas y gráficas</span>
+      <span class="qnav-arrow">→</span>
+    </a>
+    <a class="qnav" href="#sec4">
+      <span class="qnav-num">4</span>
+      <span class="qnav-text">Historial detallado</span>
+      <span class="qnav-arrow">→</span>
+    </a>
+    <a class="qnav" href="#sec5">
+      <span class="qnav-num">5</span>
+      <span class="qnav-text">Referencia rápida</span>
+      <span class="qnav-arrow">→</span>
+    </a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- INTRO ALERT -->
+  <div class="alert green">
+    <span class="alert-emoji">💡</span>
+    <div class="alert-body"><strong>¿Primera vez aquí?</strong> Esta guía está diseñada para que puedas empezar a registrar tu progreso en menos de 5 minutos. Sigue los pasos en orden y tendrás tu primera sesión guardada antes de terminar de leer.</div>
+  </div>
+
+  <!-- SECCIÓN 1 -->
+  <div class="section" id="sec1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-header-right">
+        <div class="section-label">📍 Primer paso</div>
+        <div class="section-title">Acceder al Módulo de Progreso</div>
+        <div class="section-desc">El módulo de Progreso se encuentra en el menú lateral de GymYanten. Está disponible para todos los usuarios sin importar el rol.</div>
+      </div>
+    </div>
+
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-dot">1</div>
+        <div class="step-action">Navegar</div>
+        <div class="step-title">Abrir GymYanten e iniciar sesión</div>
+        <div class="step-text">Ingresa con tu correo y contraseña. Si es tu primera vez, consulta el Manual de Autenticación.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">2</div>
+        <div class="step-action">Navegar</div>
+        <div class="step-title">Buscar "Progreso" en el menú lateral</div>
+        <div class="step-text">En la barra de navegación izquierda, hacer clic en el ícono 📈 o en el texto "Progreso". Se cargará el dashboard de progreso.</div>
+        <div class="step-tip">💡 Puedes fijarlo como favorito haciendo clic en ⭐ junto al nombre de la sección.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">3</div>
+        <div class="step-action">Verificar</div>
+        <div class="step-title">Revisar el estado inicial</div>
+        <div class="step-text">Si es la primera vez, verás el dashboard vacío con un mensaje de bienvenida. Esto es normal — el historial se construye con cada sesión que registres.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 2 -->
+  <div class="section" id="sec2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-header-right">
+        <div class="section-label">✍️ Acción principal</div>
+        <div class="section-title">Registrar una Sesión de Entrenamiento</div>
+        <div class="section-desc">Cada vez que completes un entrenamiento, puedes registrar los datos de tu sesión. GymYanten los almacenará para generar tu historial y estadísticas.</div>
+      </div>
+    </div>
+
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-dot">1</div>
+        <div class="step-action">Iniciar</div>
+        <div class="step-title">Hacer clic en "Nueva sesión" o "Registrar progreso"</div>
+        <div class="step-text">Botón ubicado en la parte superior del dashboard de Progreso o también accesible desde el módulo de Rutinas al finalizar un entrenamiento.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">2</div>
+        <div class="step-action">Seleccionar</div>
+        <div class="step-title">Elegir la rutina o los ejercicios realizados</div>
+        <div class="step-text">Selecciona la rutina que seguiste en esta sesión. Si entrenaste sin rutina predefinida, elige "Sesión libre" y agrega los ejercicios manualmente.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">3</div>
+        <div class="step-action">Ingresar datos</div>
+        <div class="step-title">Registrar los datos por ejercicio</div>
+        <div class="step-text">Para cada ejercicio, ingresa: peso utilizado (kg), número de series completadas y repeticiones por serie. Los campos de descanso son opcionales.</div>
+        <div class="step-tip">💡 Puedes ingresar "0 kg" para ejercicios de peso corporal como dominadas o flexiones.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">4</div>
+        <div class="step-action">Agregar notas</div>
+        <div class="step-title">Escribir observaciones de la sesión (opcional)</div>
+        <div class="step-text">Usa el campo de notas para registrar cómo te sentiste, si aumentaste el peso respecto a la sesión anterior, o cualquier observación relevante.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">5</div>
+        <div class="step-action">Guardar</div>
+        <div class="step-title">Hacer clic en "Guardar sesión"</div>
+        <div class="step-text">Los datos quedan guardados permanentemente. Verás una confirmación y serás redirigido al dashboard actualizado con la nueva sesión.</div>
+      </div>
+    </div>
+
+    <div class="alert blue">
+      <span class="alert-emoji">ℹ️</span>
+      <div class="alert-body"><strong>Auto-guardado:</strong> GymYanten guarda automáticamente cada ejercicio que completes si inicias la sesión desde el módulo de Rutinas. Al finalizar, solo necesitas confirmar la sesión.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 3 -->
+  <div class="section" id="sec3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-header-right">
+        <div class="section-label">📊 Visualización</div>
+        <div class="section-title">Ver tus Métricas y Gráficas</div>
+        <div class="section-desc">GymYanten calcula automáticamente estadísticas de tu progreso y las muestra en gráficas interactivas.</div>
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card green">
+        <div class="metric-icon">💪</div>
+        <div class="metric-name">Volumen Total</div>
+        <div class="metric-value">KG×REPS</div>
+        <div class="metric-desc">Carga total movida por sesión y acumulada. Principal indicador de progreso de fuerza.</div>
+      </div>
+      <div class="metric-card orange">
+        <div class="metric-icon">🔥</div>
+        <div class="metric-name">Sesiones/Semana</div>
+        <div class="metric-value">FREQ.</div>
+        <div class="metric-desc">Frecuencia de entrenamiento semanal. Meta recomendada: 3–5 sesiones.</div>
+      </div>
+      <div class="metric-card blue">
+        <div class="metric-icon">📈</div>
+        <div class="metric-name">Progresión de Peso</div>
+        <div class="metric-value">TREND</div>
+        <div class="metric-desc">Evolución del peso usado en cada ejercicio a lo largo del tiempo.</div>
+      </div>
+      <div class="metric-card purple">
+        <div class="metric-icon">🗓️</div>
+        <div class="metric-name">Racha Activa</div>
+        <div class="metric-value">DÍAS</div>
+        <div class="metric-desc">Días consecutivos con al menos una sesión registrada. ¡No rompas tu racha!</div>
+      </div>
+    </div>
+
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-dot">1</div>
+        <div class="step-action">Ver dashboard</div>
+        <div class="step-title">Revisar el resumen semanal</div>
+        <div class="step-text">En la parte superior del dashboard verás las métricas de la semana actual: sesiones completadas, volumen total y racha activa.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">2</div>
+        <div class="step-action">Explorar gráficas</div>
+        <div class="step-title">Analizar la gráfica de progresión por ejercicio</div>
+        <div class="step-text">Selecciona cualquier ejercicio en el selector "Ver progreso de:" para ver su curva de progresión de peso a lo largo del tiempo.</div>
+        <div class="step-tip">💡 Busca ejercicios donde el peso haya aumentado un 10-15% en 4 semanas — eso indica un progreso saludable.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">3</div>
+        <div class="step-action">Filtrar</div>
+        <div class="step-title">Cambiar el rango de fechas</div>
+        <div class="step-text">Usa el selector de período: Última semana / Último mes / Últimos 3 meses / Todo el historial. Las gráficas se actualizan automáticamente.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 4 -->
+  <div class="section" id="sec4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-header-right">
+        <div class="section-label">📚 Historial</div>
+        <div class="section-title">Explorar el Historial de Sesiones</div>
+        <div class="section-desc">El historial guarda todos tus entrenamientos pasados. Puedes revisarlos, editarlos o eliminarlos en cualquier momento.</div>
+      </div>
+    </div>
+
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-dot">1</div>
+        <div class="step-action">Navegar</div>
+        <div class="step-title">Ir a la pestaña "Historial"</div>
+        <div class="step-text">Dentro del módulo de Progreso, hacer clic en la pestaña "Historial" (o "Mis sesiones"). Verás la lista cronológica de todas tus sesiones.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">2</div>
+        <div class="step-action">Buscar</div>
+        <div class="step-title">Filtrar por fecha o tipo de ejercicio</div>
+        <div class="step-text">Usa el filtro de fecha para buscar sesiones en un período específico. También puedes filtrar por rutina o por ejercicio específico.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">3</div>
+        <div class="step-action">Revisar</div>
+        <div class="step-title">Ver el detalle de cualquier sesión</div>
+        <div class="step-text">Hacer clic en cualquier sesión para ver todos los ejercicios registrados, los pesos usados, series, repeticiones y las notas que escribiste ese día.</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">4</div>
+        <div class="step-action">Editar (si aplica)</div>
+        <div class="step-title">Corregir un dato incorrecto</div>
+        <div class="step-text">En la vista de detalle de la sesión, hacer clic en "Editar sesión". Podrás modificar los datos hasta 48 horas después de haberla registrado.</div>
+        <div class="step-tip">⚠️ Editar el historial puede afectar las gráficas de progresión. Úsalo solo para corregir errores reales.</div>
+      </div>
+    </div>
+
+    <div class="alert orange">
+      <span class="alert-emoji">⚠️</span>
+      <div class="alert-body"><strong>Eliminar sesiones:</strong> Las sesiones eliminadas no pueden recuperarse. Si accidentalmente registraste datos incorrectos, usa la función Editar en lugar de eliminar.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 5 - REFERENCIA RÁPIDA -->
+  <div class="section" id="sec5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-header-right">
+        <div class="section-label">⚡ Referencia</div>
+        <div class="section-title">Tabla de Referencia Rápida</div>
+        <div class="section-desc">Consulta rápida de las acciones principales, dónde encontrarlas y qué datos necesitas.</div>
+      </div>
+    </div>
+
+    <table class="qref-table">
+      <thead>
+        <tr>
+          <th>Acción</th>
+          <th>Dónde</th>
+          <th>Datos necesarios</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Registrar sesión nueva</td>
+          <td>Progreso → "Nueva sesión"</td>
+          <td>Ejercicios, peso, series, reps</td>
+          <td><span class="badge green">Todos</span></td>
+        </tr>
+        <tr>
+          <td>Ver dashboard de métricas</td>
+          <td>Progreso → Dashboard</td>
+          <td>—</td>
+          <td><span class="badge green">Todos</span></td>
+        </tr>
+        <tr>
+          <td>Ver gráfica de un ejercicio</td>
+          <td>Dashboard → Selector de ejercicio</td>
+          <td>Al menos 2 sesiones registradas</td>
+          <td><span class="badge green">Todos</span></td>
+        </tr>
+        <tr>
+          <td>Consultar historial</td>
+          <td>Progreso → Historial</td>
+          <td>—</td>
+          <td><span class="badge green">Todos</span></td>
+        </tr>
+        <tr>
+          <td>Editar sesión pasada</td>
+          <td>Historial → sesión → Editar</td>
+          <td>Datos corregidos</td>
+          <td><span class="badge blue">Propio</span></td>
+        </tr>
+        <tr>
+          <td>Ver progreso de otro usuario</td>
+          <td>Panel Admin → usuario → Progreso</td>
+          <td>—</td>
+          <td><span class="badge purple">Admin</span></td>
+        </tr>
+        <tr>
+          <td>Exportar historial a CSV</td>
+          <td>Historial → "Exportar datos"</td>
+          <td>—</td>
+          <td><span class="badge green">Todos</span></td>
+        </tr>
+        <tr>
+          <td>Eliminar una sesión</td>
+          <td>Historial → sesión → Eliminar</td>
+          <td>Confirmación requerida</td>
+          <td><span class="badge orange">Irreversible</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:32px;">
+      <div style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">Atajos de navegación</div>
+      <div class="shortcut-grid">
+        <div class="shortcut">
+          <span class="shortcut-icon">📈</span>
+          <div class="shortcut-text">
+            <div class="shortcut-title">Dashboard de progreso</div>
+            <div class="shortcut-sub">Menú → Progreso</div>
+          </div>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-icon">➕</span>
+          <div class="shortcut-text">
+            <div class="shortcut-title">Nueva sesión rápida</div>
+            <div class="shortcut-sub">Botón "+" en barra superior</div>
+          </div>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-icon">📋</span>
+          <div class="shortcut-text">
+            <div class="shortcut-title">Historial de sesiones</div>
+            <div class="shortcut-sub">Progreso → pestaña Historial</div>
+          </div>
+        </div>
+        <div class="shortcut">
+          <span class="shortcut-icon">📤</span>
+          <div class="shortcut-text">
+            <div class="shortcut-title">Exportar mis datos</div>
+            <div class="shortcut-sub">Historial → Exportar datos (CSV)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CIERRE -->
+  <div class="alert green">
+    <span class="alert-emoji">🎯</span>
+    <div class="alert-body">
+      <strong>¡Listo para empezar!</strong> Registra tu primera sesión hoy. Recuerda: la consistencia es más importante que la perfección. Cada sesión registrada es un dato valioso que te ayudará a ver tu evolución a lo largo del tiempo. <br><br>
+      ¿Necesitas más ayuda? Contacta al soporte en <strong>soporte@gymyanten.com</strong> o consulta la Ayuda en Línea del módulo de Ejercicios.
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo">GYMYANTEN</span>
+  <span>Guía de Inicio Rápido — Módulo 4: Progreso de Entrenamiento | v1.0 | Abril 2025</span>
+  <span>📄 Imprimible</span>
+</footer>
+
+</body>
+</html>

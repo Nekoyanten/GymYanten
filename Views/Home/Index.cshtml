@@ -63,7 +63,78 @@
     .quick-nombre { font-weight: 700; font-size: .95rem; letter-spacing: .5px; }
     .quick-desc { font-size: .8rem; color: var(--blanco3); }
     .quick-arrow { font-size: .75rem; color: var(--blanco3); margin-top: auto; }
+
+    /* ══ VIDEO TUTORIAL ══ */
+    .video-section {
+        margin-top: 3.5rem;
+        padding-top: 3rem;
+        border-top: 1px solid var(--borde);
+    }
+    .video-header {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .video-header-left {}
+    .video-eyebrow {
+        font-size: .72rem; font-weight: 700; letter-spacing: 3px;
+        text-transform: uppercase; color: var(--amarillo);
+        display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem;
+    }
+    .video-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--amarillo); }
+    .video-titulo {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 2rem; letter-spacing: 3px; color: var(--blanco); line-height: 1;
+    }
+    .video-desc { font-size: .85rem; color: var(--blanco3); margin-top: .4rem; }
+
+    .video-wrapper {
+        position: relative;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid var(--borde2);
+        background: #000;
+        box-shadow: 0 0 0 1px var(--borde), 0 20px 60px rgba(0,0,0,.6);
+        aspect-ratio: 16/9;
+        width: 100%;
+        max-width: 860px;
+        margin: 0 auto;
+    }
+    .video-wrapper iframe {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        border: none;
+    }
+    /* Accent bar on video */
+    .video-wrapper::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0;
+        height: 3px; background: var(--amarillo);
+        z-index: 2;
+    }
+    .video-meta {
+        display: flex; align-items: center; gap: 1.5rem;
+        margin-top: 1rem; font-size: .78rem; color: var(--blanco3);
+        justify-content: center; flex-wrap: wrap;
+    }
+    .video-meta-item { display: flex; align-items: center; gap: .35rem; }
 </style>
+
+@* ══ VIDEO TUTORIAL - visible para todos ══ *@
+<div class="video-section">
+    <div class="video-header">
+        <div class="video-header-left">
+            <div class="video-eyebrow"><i class="bi bi-play-circle-fill"></i> Tutorial</div>
+            <div class="video-titulo">CÓMO USAR GYMYANTEN</div>
+            <div class="video-desc">Aprende a gestionar ejercicios, rutinas y progreso en minutos.</div>
+        </div>
+        <a class="btn-outline"
+           href="https://youtu.be/WuupVx6YOUM"
+           target="_blank"
+           style="gap:.4rem;border-color:rgba(255,230,0,.35);color:var(--amarillo);">
+            <i class="bi bi-youtube"></i> Ver en YouTube
+        </a>
+    </div>
+</div>
 
 @if (!(User.Identity?.IsAuthenticated ?? false))
 {

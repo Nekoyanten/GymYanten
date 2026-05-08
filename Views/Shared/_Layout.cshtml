@@ -439,6 +439,123 @@
             main { padding: 1.5rem 1rem; }
             .page-head { flex-direction: column; align-items: flex-start; gap: 1rem; }
         }
+
+        /* ════════════ BOTÓN FLOTANTE AYUDA ════════════ */
+        .fab-ayuda {
+            position: fixed;
+            bottom: 1.75rem;
+            right: 1.75rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: .6rem;
+        }
+        .fab-btn {
+            width: 52px; height: 52px;
+            background: var(--amarillo);
+            color: var(--negro);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(255,230,0,.35), 0 2px 8px rgba(0,0,0,.4);
+            transition: transform .2s, box-shadow .2s, background .15s;
+            flex-shrink: 0;
+        }
+        .fab-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(255,230,0,.5), 0 2px 10px rgba(0,0,0,.5); background: #fff04d; }
+        .fab-tooltip {
+            background: var(--negro2);
+            border: 1px solid var(--borde2);
+            color: var(--blanco2);
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .5px;
+            padding: .35rem .85rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(8px);
+            transition: opacity .2s, transform .2s;
+            pointer-events: none;
+        }
+        .fab-ayuda:hover .fab-tooltip { opacity: 1; transform: translateX(0); }
+
+        /* Modal video */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.85);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .modal-overlay.open { display: flex; animation: fadeIn .2s ease; }
+        @@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+        .modal-box {
+            background: var(--negro2);
+            border: 1px solid var(--borde2);
+            border-top: 3px solid var(--amarillo);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 840px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,.8);
+            animation: slideUp .25s ease;
+        }
+        @@keyframes slideUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
+
+        .modal-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--borde);
+        }
+        .modal-head-left { display: flex; align-items: center; gap: .75rem; }
+        .modal-head-icon {
+            width: 34px; height: 34px;
+            background: rgba(255,230,0,.12);
+            border: 1px solid rgba(255,230,0,.3);
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--amarillo); font-size: 1rem;
+        }
+        .modal-head-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.25rem; letter-spacing: 2px; color: var(--blanco);
+        }
+        .modal-head-sub { font-size: .75rem; color: var(--blanco3); margin-top: .1rem; }
+        .modal-close {
+            background: transparent; border: 1px solid var(--borde);
+            color: var(--blanco3); width: 32px; height: 32px;
+            border-radius: 4px; cursor: pointer; font-size: .9rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color .15s, color .15s;
+        }
+        .modal-close:hover { border-color: var(--rojo); color: var(--rojo); }
+
+        .modal-video-wrap {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        .modal-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+        .modal-footer {
+            padding: .85rem 1.25rem;
+            border-top: 1px solid var(--borde);
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: .78rem; color: var(--blanco3); flex-wrap: wrap; gap: .5rem;
+        }
+        .modal-footer-links { display: flex; gap: 1rem; }
+        .modal-footer a {
+            color: var(--amarillo); text-decoration: none; font-weight: 600;
+            font-size: .75rem; display: flex; align-items: center; gap: .3rem;
+        }
+        .modal-footer a:hover { text-decoration: underline; }
     </style>
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -512,5 +629,69 @@
 </footer>
 
 @await RenderSectionAsync("Scripts", required: false)
+
+<!-- ══ BOTÓN FLOTANTE AYUDA + MODAL VIDEO ══ -->
+<div class="fab-ayuda">
+    <span class="fab-tooltip"><i class="bi bi-play-fill"></i> Ver tutorial en video</span>
+    <button class="fab-btn" onclick="abrirModalVideo()" aria-label="Ver tutorial de ayuda">
+        <i class="bi bi-question-lg"></i>
+    </button>
+</div>
+
+<div class="modal-overlay" id="modalVideo" onclick="cerrarSiOverlay(event)">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div class="modal-head-left">
+                <div class="modal-head-icon"><i class="bi bi-play-circle-fill"></i></div>
+                <div>
+                    <div class="modal-head-title">TUTORIAL GYMYANTEN</div>
+                    <div class="modal-head-sub">Aprende a usar el aplicativo paso a paso</div>
+                </div>
+            </div>
+            <button class="modal-close" onclick="cerrarModalVideo()" aria-label="Cerrar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="modal-video-wrap">
+            <iframe id="videoFrame"
+                src=""
+                data-src="https://www.youtube.com/embed/WuupVx6YOUM?rel=0&modestbranding=1&color=white&autoplay=1"
+                title="Tutorial GymYanten"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="modal-footer">
+            <span><i class="bi bi-info-circle"></i> Ejercicios · Rutinas · Progreso · Administración</span>
+            <div class="modal-footer-links">
+                <a href="/ayuda/ejercicios.html" target="_blank"><i class="bi bi-file-text"></i> Ayuda Ejercicios</a>
+                <a href="/ayuda/progreso.html" target="_blank"><i class="bi bi-file-text"></i> Guía Progreso</a>
+                <a href="https://youtu.be/WuupVx6YOUM" target="_blank"><i class="bi bi-youtube"></i> Ver en YouTube</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function abrirModalVideo() {
+        var frame = document.getElementById('videoFrame');
+        frame.src = frame.dataset.src;
+        document.getElementById('modalVideo').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function cerrarModalVideo() {
+        document.getElementById('modalVideo').classList.remove('open');
+        document.getElementById('videoFrame').src = '';
+        document.body.style.overflow = '';
+    }
+    function cerrarSiOverlay(e) {
+        if (e.target === document.getElementById('modalVideo')) cerrarModalVideo();
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') cerrarModalVideo();
+    });
+</script>
 </body>
 </html>
