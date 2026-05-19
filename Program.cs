@@ -6,6 +6,7 @@
 using GymYanten.Data;
 using GymYanten.Models;
 using GymYanten.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
@@ -18,6 +19,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build());
 
 // SECURITY FIX #1 — Registrar PasswordHasherService y el adaptador para Identity
 // IMPORTANTE: registrar ANTES de AddIdentity para que DI lo resuelva correctamente

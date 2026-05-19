@@ -4,13 +4,13 @@ namespace GymYanten.Models.ViewModels
 {
     public class UsuarioAdminViewModel
     {
-        public string Id              { get; set; } = string.Empty;
-        public string NombreCompleto  { get; set; } = string.Empty;
-        public string Email           { get; set; } = string.Empty;
-        public string? Telefono       { get; set; }
-        public string Rol             { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
+        public string NombreCompleto { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string? Telefono { get; set; }
+        public string Rol { get; set; } = string.Empty;
         public DateTime FechaRegistro { get; set; }
-        public bool Activo            { get; set; }
+        public bool Activo { get; set; }
     }
 
     public class CrearUsuarioViewModel
@@ -66,5 +66,32 @@ namespace GymYanten.Models.ViewModels
 
         [Display(Name = "Activo")]
         public bool Activo { get; set; }
+    }
+
+    // SECURITY FIX — ViewModel tipado para CambiarContrasena.
+    // Antes: string plano sin Data Annotations → sin validación en capa MVC.
+    // Ahora: longitud mínima 8 / máxima 128 + confirmación obligatoria.
+    public class CambiarContrasenaViewModel
+    {
+        [Required]
+        public string Id { get; set; } = string.Empty;
+
+        // SECURITY FIX: mínimo 8 caracteres (política de Identity), máximo 128
+        // para evitar payloads de DoS en el hasher PBKDF2 (strings muy largos
+        // son costosos de hashear intencionalmente).
+        [Required(ErrorMessage = "La nueva contraseña es obligatoria.")]
+        [StringLength(128, MinimumLength = 8,
+            ErrorMessage = "La contraseña debe tener entre 8 y 128 caracteres.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Nueva Contraseña")]
+        public string NuevaContrasena { get; set; } = string.Empty;
+
+        // SECURITY FIX: confirmación — evita typos que dejen al usuario bloqueado
+        // con una contraseña que nadie conoce.
+        [Required(ErrorMessage = "Debes confirmar la contraseña.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar Contraseña")]
+        [Compare(nameof(NuevaContrasena), ErrorMessage = "Las contraseñas no coinciden.")]
+        public string ConfirmarContrasena { get; set; } = string.Empty;
     }
 }

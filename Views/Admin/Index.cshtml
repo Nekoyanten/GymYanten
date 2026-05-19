@@ -131,14 +131,45 @@
             <i class="bi bi-key-fill" style="color:var(--amarillo);"></i> Cambiar Contraseña
         </div>
         <div id="modal-nombre" style="color:var(--blanco3);font-size:.85rem;margin-bottom:1.25rem;"></div>
-        <form asp-action="CambiarContrasena" method="post">
+        @* SECURITY FIX — form ligado a CambiarContrasenaViewModel:
+           name="NuevaContrasena" / "ConfirmarContrasena" coinciden con las propiedades
+           del ViewModel para que ModelState las valide en el controller. *@
+        <form asp-action="CambiarContrasena" method="post" id="form-cambiar-pass" novalidate>
             @Html.AntiForgeryToken()
-            <input type="hidden" id="modal-id" name="id" />
-            <div class="form-grupo" style="margin-bottom:1.25rem;">
+            @* Hidden: Id del usuario target *@
+            <input type="hidden" id="modal-id" name="Id" />
+
+            @* SECURITY FIX: minlength=8, maxlength=128, required en HTML5
+               como primera línea de defensa (UX rápida antes del POST). *@
+            <div class="form-grupo" style="margin-bottom:1rem;">
                 <label class="form-label">Nueva Contraseña</label>
-                <input type="password" name="nuevaContrasena" class="form-ctrl"
-                       placeholder="Mayúscula, número y símbolo" />
+                <input type="password"
+                       id="modal-nueva"
+                       name="NuevaContrasena"
+                       class="form-ctrl"
+                       placeholder="Mín. 8 caracteres, mayúscula, número y símbolo"
+                       minlength="8"
+                       maxlength="128"
+                       required
+                       autocomplete="new-password" />
+                <div class="val-error" id="err-nueva" style="display:none;color:#f87171;font-size:.8rem;margin-top:.3rem;"></div>
             </div>
+
+            @* SECURITY FIX: campo de confirmación — detecta typos antes de guardar *@
+            <div class="form-grupo" style="margin-bottom:1.25rem;">
+                <label class="form-label">Confirmar Contraseña</label>
+                <input type="password"
+                       id="modal-confirmar"
+                       name="ConfirmarContrasena"
+                       class="form-ctrl"
+                       placeholder="Repite la contraseña"
+                       minlength="8"
+                       maxlength="128"
+                       required
+                       autocomplete="new-password" />
+                <div class="val-error" id="err-confirmar" style="display:none;color:#f87171;font-size:.8rem;margin-top:.3rem;"></div>
+            </div>
+
             <div style="display:flex;gap:.75rem;">
                 <button type="submit" class="btn-amarillo"><i class="bi bi-floppy-fill"></i> Guardar</button>
                 <button type="button" class="btn-outline" onclick="cerrarModal()">Cancelar</button>
@@ -148,17 +179,7 @@
 </div>
 
 @section Scripts {
-<script>
-function abrirModal(id, nombre) {
-    document.getElementById('modal-id').value = id;
-    document.getElementById('modal-nombre').textContent = 'Usuario: ' + nombre;
-    document.getElementById('modal-pass').style.display = 'flex';
-}
-function cerrarModal() {
-    document.getElementById('modal-pass').style.display = 'none';
-}
-document.getElementById('modal-pass').addEventListener('click', function(e) {
-    if (e.target === this) cerrarModal();
-});
-</script>
+@* SECURITY FIX — JS movido a wwwroot/js/admin-modal-pass.js para evitar
+   conflictos del parser Razor con regex literales y comillas simples. *@
+<script src="~/js/admin-modal-pass.js"></script>
 }
